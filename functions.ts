@@ -3,7 +3,7 @@ import { Skill } from "./models/skill";
 import { User } from "./models/user";
 import { createServer } from "http";
 import { Server, Socket} from "socket.io"
-import { express } from "express";
+import * as express from "express";
 
 const app = express();
 const server = createServer(app);
