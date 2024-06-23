@@ -1,5 +1,5 @@
-import { Creature } from "../src/models/creature";
-import { Skill } from "../src/models/skill";
+import { Creature } from "./models/creature";
+import { Skill } from "./models/skill";
 import { CrService } from "./db_services/crService";
 import { generateSkill } from "./tools/skillGenerator";
 import { UserService } from "./db_services/userService";
@@ -10,7 +10,7 @@ const io = require('socket.io')(3005,
 {
     cors:
     {
-        origin: ['http://localhost:8100'],
+        origin: ['https://allatos-umber.vercel.app/'],
     }
 });
 

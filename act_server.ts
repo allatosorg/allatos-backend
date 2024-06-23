@@ -1,6 +1,6 @@
 import { initializeApp } from "firebase/app";
 import { getFirestore} from 'firebase/firestore/lite';
-import { firebaseConfig } from "../src/app/fbaseconfig";
+import { firebaseConfig } from "./fbaseconfig";
 import { CrService } from "./db_services/crService";
 import { Activity } from "./models/activity";
 import { resolveAct } from "./tools/actResolver";
@@ -13,7 +13,7 @@ const io = require('socket.io')(3010,
 {
     cors:
     {
-    origin: ['http://localhost:8100'],
+    origin: ['https://allatos-umber.vercel.app/'],
     }
 });
 const schedule = require('node-schedule');
