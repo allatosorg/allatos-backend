@@ -1,6 +1,6 @@
 import { initializeApp } from "firebase/app";
 import { getFirestore, collection, getDocs, doc, addDoc, setDoc, getDoc, query, where, arrayUnion, arrayRemove, updateDoc, deleteField} from 'firebase/firestore';
-import { firebaseConfig } from ".././fbaseconfig";
+import { firebaseConfig } from "../fbaseconfig";
 import { Skill } from "../models/skill";
 import { ServerCreature } from "../models/serverCreature";
 import { Trait } from "../models/trait";

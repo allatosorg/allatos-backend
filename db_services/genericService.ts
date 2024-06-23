@@ -1,6 +1,6 @@
 import { initializeApp } from "firebase/app";
 import { getFirestore, doc, getDoc, getDocs, collection, setDoc} from 'firebase/firestore';
-import { firebaseConfig } from ".././fbaseconfig";
+import { firebaseConfig } from "../fbaseconfig";
 import { Activity } from "../models/activity";
 import { Trait } from "../models/trait";
 

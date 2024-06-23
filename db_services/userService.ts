@@ -2,7 +2,7 @@ import { initializeApp } from "firebase/app";
 import { getFirestore, collection, getDocs, doc, addDoc, setDoc, getDoc, updateDoc, arrayUnion } from 'firebase/firestore';
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "firebase/auth";
 import { Injectable, inject } from "@angular/core";
-import { firebaseConfig } from ".././fbaseconfig";
+import { firebaseConfig } from "../fbaseconfig";
 import { ActivatedRouteSnapshot, CanActivateFn, Router, RouterStateSnapshot, UrlTree } from "@angular/router";
 import { User } from "../models/user";
 import { Notification } from "../models/notification";
