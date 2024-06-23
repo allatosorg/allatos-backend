@@ -6,7 +6,7 @@ const io = require('socket.io')(3005,
 {
     cors:
     {
-        origin: ['*'],
+        origin: '*',
     }
 });
 
