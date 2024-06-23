@@ -6,7 +6,7 @@ const io = require('socket.io')(3005,
 {
     cors:
     {
-        origin: ['https://allatos-umber.vercel.app/'],
+        origin: ['*'],
     }
 });
 
