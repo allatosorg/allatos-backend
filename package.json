@@ -13,7 +13,8 @@
   "dependencies": {
     "firebase": "^10.11.0",
     "node-schedule": "^2.1.1",
-    "socket.io": "^4.7.4"
+    "socket.io": "^4.7.4",
+    "ts-node": "^10.9.2"
   },
   "devDependencies": {
     "concurrently": "^8.2.2"
