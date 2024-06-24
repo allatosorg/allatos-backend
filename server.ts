@@ -55,7 +55,6 @@ setInterval(async () =>
 {
   if (!pairingPeople)
   {
-    console.log("try to match")
     pairingPeople = true;
 
     while (waiting.length >= 2)

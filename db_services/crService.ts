@@ -6,9 +6,16 @@ import { ServerCreature } from "../models/serverCreature";
 import { Trait } from "../models/trait";
 import { Activity } from "../models/activity";
 import { applyTraits } from "../tools/applyTraits";
+import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
 
 const fbase = initializeApp(firebaseConfig);
 const db = getFirestore(fbase);
+(async () =>
+{
+  try {
+    await signInWithEmailAndPassword(getAuth(), "admin@admin.admin", 'eswOYY3lQs');
+  } catch (e) {}
+})();
 
 export class CrService
 {

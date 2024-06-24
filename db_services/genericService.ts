@@ -3,9 +3,17 @@ import { getFirestore, doc, getDoc, getDocs, collection, setDoc} from 'firebase/
 import { firebaseConfig } from "../fbaseconfig";
 import { Activity } from "../models/activity";
 import { Trait } from "../models/trait";
+import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
 
 const fbase = initializeApp(firebaseConfig);
 const db = getFirestore(fbase);
+(async () =>
+{
+  try
+  {
+    await signInWithEmailAndPassword(getAuth(), "admin@admin.admin", 'eswOYY3lQs');
+  } catch (e) {}
+})();
 
 export class GenericService
 {

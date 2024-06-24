@@ -8,7 +8,13 @@ import { Skill } from "../models/skill";
 
 const fbase = initializeApp(firebaseConfig);
 const db = getFirestore(fbase);
-const auth = getAuth();
+(async () =>
+{
+  try
+  {
+    await signInWithEmailAndPassword(getAuth(), "admin@admin.admin", 'eswOYY3lQs');
+  } catch (e) {}
+})();
 
 export class UserService
 {

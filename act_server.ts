@@ -9,9 +9,24 @@ import { GenericService } from "./db_services/genericService";
 import * as express from "express";
 import { createServer } from "http";
 import { Server, Socket} from "socket.io"
+import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
 
 const fbase = initializeApp(firebaseConfig);
 const db = getFirestore(fbase);
+const schedule = require('node-schedule');
+const crService = new CrService;
+const userService = new UserService;
+const genericService = new GenericService;
+
+const actMap = new Map<string, any>;
+
+(async () =>
+{
+    try
+    {
+        await rebuildOngoingActs();
+    } catch (e) {}
+})();
 const app = express();
 const server = createServer(app);
 const io = new Server(server,
@@ -21,14 +36,6 @@ const io = new Server(server,
         origin: '*'
     }
 });
-
-const schedule = require('node-schedule');
-const crService = new CrService;
-const userService = new UserService;
-const genericService = new GenericService;
-
-const actMap = new Map<string, any>;
-rebuildOngoingActs();
 
 io.on('connection', (socket: Socket) =>
 {
