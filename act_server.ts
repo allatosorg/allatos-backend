@@ -64,18 +64,18 @@ function canGo(crID: string, act: Activity): boolean
 async function rebuildOngoingActs()
 {
     let crs = await crService.getAllCreatures();
-    crs.forEach(cr =>
+    crs.forEach(async cr =>
     {
         if (cr.currentAct)
         {
             const endDate = calcEndDate(cr.currentAct.startDate, cr.currentAct.duration);
             if (endDate > new Date())
             {
-                scheduleAct(cr.crID, cr.currentAct);
+                await scheduleAct(cr.crID, cr.currentAct);
             }
             else
             {
-                finishAct(cr.crID, cr.currentAct);
+                await finishAct(cr.crID, cr.currentAct);
             }
         }
     });
@@ -84,8 +84,9 @@ async function rebuildOngoingActs()
 async function scheduleAct(crID: string, act: Activity)
 {
     act.startDate = new Date();
-    actMap.set(crID, schedule.scheduleJob(calcEndDate(act.startDate, act.duration), () => { finishAct(crID, act) }));
     await crService.setAct(crID, act);
+    actMap.set(crID, schedule.scheduleJob(calcEndDate(act.startDate, act.duration), async () => { await finishAct(crID, act) }));
+    console.log(act.startDate);
 }
 
 function calcEndDate(startDate: Date, duration: number): Date
