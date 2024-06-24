@@ -45,6 +45,7 @@ io.on('connection', (socket: Socket) =>
         if (canGo(crID, act))
         {
             let newAct = await genericService.getAct(act.name);
+            newAct.startDate = new Date();
             await scheduleAct(crID, newAct);
         }
         else io.to(socket.id).emit('start-activity-failed');
@@ -83,10 +84,8 @@ async function rebuildOngoingActs()
 
 async function scheduleAct(crID: string, act: Activity)
 {
-    act.startDate = new Date();
-    await crService.setAct(crID, act);
-    actMap.set(crID, schedule.scheduleJob(calcEndDate(act.startDate, act.duration), async () => { await finishAct(crID, act) }));
-    console.log(act.startDate);
+    crService.setAct(crID, act);
+    actMap.set(crID, schedule.scheduleJob(calcEndDate(act.startDate, act.duration), async () => { finishAct(crID, act) }));
 }
 
 function calcEndDate(startDate: Date, duration: number): Date

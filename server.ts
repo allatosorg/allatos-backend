@@ -50,6 +50,7 @@ io.on('connection', (socket: any) =>
   });
 });
 
+//TODO: handle abandoned matches (needs timer etc) to avoid memory leak
 //start matching people every 5 seconds
 setInterval(async () =>
 {
