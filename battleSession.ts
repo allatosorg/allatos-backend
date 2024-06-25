@@ -571,7 +571,7 @@ export class BattleSession
             case 'block':
                 if (skill.effects.has('stance') && this.crs[actor].turnInfo.has('lastSkill'))
                 {
-                    for (let [effect, value] of this.crs[actor].turnInfo.get('lastSkill').effects.get('stance'))
+                    for (let [effect, value] of skill.effects.get('stance'))
                     {
                         if (skill.effects.has(effect))
                         {
