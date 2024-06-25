@@ -539,9 +539,9 @@ export class BattleSession
                     skill.fatCost *= 2;
                     this.crs[actor].turnInfo.set('highGroundDebuff', false);
                 }
-                if (this.crs[actor].turnInfo.has('lastSkill') && 'combo' in this.crs[actor].turnInfo.get('lastSkill').effects)
+                if (this.crs[actor].turnInfo.has('lastSkill') && this.crs[actor].turnInfo.get('lastSkill').effects.has('combo'))
                 {
-                    for (let [effect, value] of this.crs[actor].turnInfo.lastSkill.effects.get('combo'))
+                    for (let [effect, value] of this.crs[actor].turnInfo.get('lastSkill').effects.get('combo'))
                     {
                         if (skill.effects.has(effect))
                         {

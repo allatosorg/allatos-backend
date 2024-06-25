@@ -83,15 +83,15 @@ const actEventTable =
 {
     'Climb the Mountains':
     [
-        ['Become stronger', 0.13]
+        ['Become stronger', 0.26]
     ],
     'Explore the Jungle':
     [
-        ['Hidden treasure', 0.2]
+        ['Hidden treasure', 0.3]
     ],
     'Visit the Magical Pond':
     [
-        ['Blessed by spirit', 0.05]
+        ['Blessed by spirit', 0.15]
     ]
 }
 
