@@ -555,11 +555,11 @@ export class BattleSession
                         }
                     }
                 }
-                if ('shred' in skill.effects)
+                if (skill.effects.has('shred'))
                 {
                     this.removeBlock(this.crs[opponent], skill.effects.get('shred'));
                 }
-                if ('heavy' in skill.effects)
+                if (skill.effects.has('heavy'))
                 {
                     this.crs[opponent].fatigue += skill.effects.get('heavy');
                 }
