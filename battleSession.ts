@@ -494,8 +494,10 @@ export class BattleSession
         this.combatLog = "";
     }
 
-    useSkill(actor: number, opponent: number, skill: Skill)
+    useSkill(actor: number, opponent: number, ogSkill: Skill)
     {
+        //make a clone thats modifiable (and put ogSkill into grave)
+        let skill = structuredClone(ogSkill);
         this.io.to(this.roomID).emit('action-happened', skill);
         this.sendSnapshot();
 
@@ -618,7 +620,7 @@ export class BattleSession
 
         this.crs[actor].fatigue += skill.fatCost;
         this.crs[actor].turnInfo.set('lastSkill', skill);
-        this.crs[actor].grave.push(skill);
+        this.crs[actor].grave.push(ogSkill);
 
         this.io.to(this.roomID).emit('action-happened', {type: ''});
         this.sendSnapshot();
