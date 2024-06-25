@@ -108,7 +108,7 @@ export function generateSkillByName(type: string, name: string): Skill
     switch(type)
     {
         case 'attack':
-            effects.set('dmg', 7); 
+            effects.set('dmg', 3); 
             fatCost = 11;
             selfTarget = false;
 
@@ -116,7 +116,7 @@ export function generateSkillByName(type: string, name: string): Skill
 
 
         case 'block':
-            effects.set('block', 5);
+            effects.set('block', 2);
             fatCost = 3;
             selfTarget = true;
 
