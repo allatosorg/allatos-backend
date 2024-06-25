@@ -363,15 +363,15 @@ const allSkills = new Map<string, Function>
         effects.set('block', effects.get('block') + x + 2);
     }],
 
-    //+3-4 block, apply pumped to self
+    //+0-1 block, apply 2 pumped to self
     ["Warm Up", () =>
     {
         name = "Warm Up";
 
         const x = rndInt(0, 1);
-        fatCost += 5 + x;
-        effects.set("Pumped", [1, true]);
-        effects.set('block', effects.get('block') + x + 3);
+        fatCost += 9 + x;
+        effects.set("Pumped", [2, true]);
+        effects.set('block', effects.get('block') + x);
     }],
 
     //+2-4 block, if opponent used N fatigue: apply 1 Vulnerable
