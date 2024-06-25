@@ -12,8 +12,8 @@ import { Server, Socket} from "socket.io"
 import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
 import * as fs from 'fs';
 
-var privateKey = fs.readFileSync( 'privatekey.pem' );
-var certificate = fs.readFileSync( 'certificate.pem' );
+var privateKey = fs.readFileSync( 'privkey.pem' );
+var certificate = fs.readFileSync( 'fullchain.pem' );
 const fbase = initializeApp(firebaseConfig);
 const db = getFirestore(fbase);
 const schedule = require('node-schedule');

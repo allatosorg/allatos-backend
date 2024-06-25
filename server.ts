@@ -7,8 +7,8 @@ import { createServer } from "https";
 import { Server, Socket} from "socket.io"
 import * as fs from 'fs';
 
-var privateKey = fs.readFileSync( 'privatekey.pem' );
-var certificate = fs.readFileSync( 'certificate.pem' );
+var privateKey = fs.readFileSync( 'privkey.pem' );
+var certificate = fs.readFileSync( 'fullchain.pem' );
 const crService = new CrService;
 const battlesInProgress = new Map<string, BattleSession>;
 const waiting: Array<any> = [];

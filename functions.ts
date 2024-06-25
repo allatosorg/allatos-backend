@@ -10,8 +10,8 @@ import { createServer } from "https";
 import { Server, Socket} from "socket.io"
 import * as fs from 'fs';
 
-var privateKey = fs.readFileSync( 'privatekey.pem' );
-var certificate = fs.readFileSync( 'certificate.pem' );
+var privateKey = fs.readFileSync( 'privkey.pem' );
+var certificate = fs.readFileSync( 'fullchain.pem' );
 const app = express();
 const server = createServer(
 {
