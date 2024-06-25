@@ -7,10 +7,13 @@ import { resolveAct } from "./tools/actResolver";
 import { UserService } from "./db_services/userService";
 import { GenericService } from "./db_services/genericService";
 import * as express from "express";
-import { createServer } from "http";
+import { createServer } from "https";
 import { Server, Socket} from "socket.io"
 import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
+import * as fs from 'fs';
 
+var privateKey = fs.readFileSync( 'privatekey.pem' );
+var certificate = fs.readFileSync( 'certificate.pem' );
 const fbase = initializeApp(firebaseConfig);
 const db = getFirestore(fbase);
 const schedule = require('node-schedule');
@@ -28,8 +31,11 @@ const actMap = new Map<string, any>;
     } catch (e) {}
 })();
 const app = express();
-const server = createServer(app);
-const io = new Server(server,
+const server = createServer(
+{
+    key: privateKey,
+    cert: certificate
+}, app);const io = new Server(server,
 {
     cors:   
     {

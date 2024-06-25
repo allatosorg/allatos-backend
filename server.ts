@@ -3,9 +3,12 @@ import { Creature } from "./models/creature";
 import { ServerCreature } from "./models/serverCreature";
 import { CrService } from "./db_services/crService";
 import * as express from "express";
-import { createServer } from "http";
+import { createServer } from "https";
 import { Server, Socket} from "socket.io"
+import * as fs from 'fs';
 
+var privateKey = fs.readFileSync( 'privatekey.pem' );
+var certificate = fs.readFileSync( 'certificate.pem' );
 const crService = new CrService;
 const battlesInProgress = new Map<string, BattleSession>;
 const waiting: Array<any> = [];
@@ -13,8 +16,11 @@ let pairingPeople = false;
 let roomCounter = 0;
 
 const app = express();
-const server = createServer(app);
-const io = new Server(server,
+const server = createServer(
+{
+    key: privateKey,
+    cert: certificate
+}, app);const io = new Server(server,
 {
     cors:   
     {

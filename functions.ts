@@ -6,11 +6,18 @@ import { UserService } from "./db_services/userService";
 import { User } from "./models/user";
 import { generateCreature } from "./tools/creatureGenerator";
 import * as express from "express";
-import { createServer } from "http";
+import { createServer } from "https";
 import { Server, Socket} from "socket.io"
+import * as fs from 'fs';
 
+var privateKey = fs.readFileSync( 'privatekey.pem' );
+var certificate = fs.readFileSync( 'certificate.pem' );
 const app = express();
-const server = createServer(app);
+const server = createServer(
+{
+    key: privateKey,
+    cert: certificate
+}, app);
 const io = new Server(server,
 {
     cors:   
