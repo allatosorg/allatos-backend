@@ -91,38 +91,45 @@ export class BattleSession
         let pickedBy: ServerCreature;
         let skill: Skill;
 
-        if (this.gameState === 10 || this.gameState === 20)
+        try
         {
-            if (owneruid === this.uids[0])
+            if (this.gameState === 10 || this.gameState === 20)
             {
-                pickedBy = this.crs[0];
-                skill = pickedBy.skills[index];
-                this.skillsUsed[0].push(skill);
-                this.canPicks[0] = false;
+                if (owneruid === this.uids[0])
+                {
+                    pickedBy = this.crs[0];
+                    skill = pickedBy.skills[index];
+                    this.skillsUsed[0].push(skill);
+                    this.canPicks[0] = false;
+                }
+                else
+                {
+                    pickedBy = this.crs[1];
+                    skill = pickedBy.skills[index];
+                    this.skillsUsed[1].push(skill);
+                    this.canPicks[1] = false;
+                }
+                skill.usedByID = pickedBy.crID;
+    
+    
+            pickedBy.skills.splice(pickedBy.skills.indexOf(skill), 1);
+    
+                if (!this.canPicks[0] && !this.canPicks[1])
+                {
+                    if (this.gameState === 10)
+                        this.revealPhase();
+                    else if (this.gameState === 20)
+                        this.actionPhase();
+                    
+                }
+                else this.sendGameState();
             }
-            else
-            {
-                pickedBy = this.crs[1];
-                skill = pickedBy.skills[index];
-                this.skillsUsed[1].push(skill);
-                this.canPicks[1] = false;
-            }
-            skill.usedByID = pickedBy.crID;
-
-
-        pickedBy.skills.splice(pickedBy.skills.indexOf(skill), 1);
-
-            if (!this.canPicks[0] && !this.canPicks[1])
-            {
-                if (this.gameState === 10)
-                    this.revealPhase();
-                else if (this.gameState === 20)
-                    this.actionPhase();
-                
-            }
-            else this.sendGameState();
         }
-
+        catch(err)
+        {
+            console.error(err);
+            this.gameOverCb();
+        }
     }
 
     //roll ini, set blocks to 0, start of turn triggers

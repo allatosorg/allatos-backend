@@ -87,7 +87,7 @@ async function joinRoom(socket: any, crID: string, roomID: string)
   {
     let newBattle = new BattleSession(roomID, await crService.getCreatureById(crID), io, async (winner: ServerCreature) =>
     {
-      await crService.addWin(winner);
+      if (winner) await crService.addWin(winner);
       battlesInProgress.delete(roomID);
     });
     newBattle.sockets[0] = socket;

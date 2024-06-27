@@ -247,14 +247,15 @@ const allSkills = new Map<string, Function>
         effects.set('shred', x + 2);
     }],
 
-    //combo: +9-12 dmg
+    //+3 dmg, combo: +6-9 dmg
     ["Twin Strike", () =>
     {
         name = "Twin Strike";
 
         const x = rndInt(0, 3);
-        fatCost += x + 2;
-        effects.set('combo', new Map<string, any>([ ['dmg', x + 9] ]));
+        fatCost += 2*x + 2;
+        effects.set('dmg', effects.get('dmg') + 3);
+        effects.set('combo', new Map<string, any>([ ['dmg', x + 6] ]));
     }],
 
     //+3-5 dmg, apply weakened
@@ -274,7 +275,7 @@ const allSkills = new Map<string, Function>
         name = "Reckless Strike";
 
         const x = rndInt(0, 2);
-        fatCost += x;
+        fatCost += 2*x;
         effects.set('dmg', effects.get('dmg') + x + 12);
         effects.set("Vulnerable", [2, true]);
     }],
