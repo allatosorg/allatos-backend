@@ -28,7 +28,7 @@ const actMap = new Map<string, any>;
     try
     {
         await rebuildOngoingActs();
-    } catch (e) {}
+    } catch (err) {console.error(err)}
 })();
 const app = express();
 const server = createServer(
