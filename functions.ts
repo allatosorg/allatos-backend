@@ -22,7 +22,7 @@ const io = new Server(server,
 {
     cors:   
     {
-        origin: '*'
+        origin: 'https://allatos-umber.vercel.app'
     }
 });
 

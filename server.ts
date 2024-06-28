@@ -24,7 +24,7 @@ const server = createServer(
 {
     cors:   
     {
-        origin: '*'
+        origin: 'https://allatos-umber.vercel.app'
     }
 });
 
