@@ -132,3 +132,6 @@ dist
 # ssl keys
 fullchain.pem
 privkey.pem
+
+# etc
+admin.ts

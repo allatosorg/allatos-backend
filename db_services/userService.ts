@@ -39,14 +39,9 @@ export class UserService
 
   async sendNotification(uid: string, noti: Notification)
   {
-    let temp = (await this.getUser(uid)).notifications;
-    if (!temp) temp = [];
-    temp.push(noti);
-    const converted = temp.map((obj)=> {return Object.assign({}, obj)});
-
     await updateDoc(doc(db, "users", uid),
     {
-      notifications: converted
+      notifications: arrayUnion(noti)
     });
   }
   
