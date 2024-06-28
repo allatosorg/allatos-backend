@@ -421,6 +421,7 @@ const allSkills = new Map<string, Function>
     {
         name = "Unrelenting Defence";
 
+        effects.delete('block');
         effects.set('steadfast', true);
     }],
 

@@ -160,7 +160,7 @@ export class Skill
         switch(this.name)
         {
             case "Throw Off Balance":
-                this.description += "If opponent used at least " + this.effects.get('offBalanceReq') + " stamina this turn, they become Vulnerable.";
+                this.description += "If opponent used at least " + this.effects.get('offBalanceReq') + " stamina, they become Vulnerable at end of turn.";
                 break;
 
             case "Body Slam":
