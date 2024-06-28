@@ -25,6 +25,7 @@ const actMap = new Map<string, any>;
 
 (async () =>
 {
+    await signInWithEmailAndPassword(getAuth(), "admin@admin.admin", 'eswOYY3lQs');
     try
     {
         await rebuildOngoingActs();
