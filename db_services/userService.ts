@@ -39,6 +39,8 @@ export class UserService
 
   async sendNotification(uid: string, noti: Notification)
   {
+    noti = Object.assign({}, noti);
+
     await updateDoc(doc(db, "users", uid),
     {
       notifications: arrayUnion(noti)
