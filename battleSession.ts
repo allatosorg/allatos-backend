@@ -294,7 +294,7 @@ export class BattleSession
 
             //count down statuses
             this.crs[actor].statuses.map((s) => {if (s.countsDown) s.counter--});
-            this.crs[actor].statuses = this.crs[actor].statuses.filter((s) => s.counter > 0);
+            this.crs[actor].statuses = this.crs[actor].statuses.filter((s) => !s.countsDown || s.counter > 0);
 
             //apply end of turn status gains
             if (this.crs[i].fatigue >= this.crs[i].stamina)
@@ -618,7 +618,7 @@ export class BattleSession
         {
             case "Shake It Off":
                 this.crs[actor].statuses.map((s) => {if (s.countsDown) s.counter--});
-                this.crs[actor].statuses = this.crs[actor].statuses.filter((s) => s.counter > 0);
+                this.crs[actor].statuses = this.crs[actor].statuses.filter((s) => !s.countsDown || s.counter > 0);
                 break;
 
             default:
