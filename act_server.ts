@@ -49,14 +49,24 @@ io.on('connection', (socket: Socket) =>
     //act is validated here
     socket.on('start-activity', async (crID: string, act: Activity) =>
     {
-        if (canGo(crID, act))
+        try
         {
-            let newAct = await genericService.getAct(act.name);
-            newAct.startDate = new Date();
-            await scheduleAct(crID, newAct);
+            if (canGo(crID, act))
+            {
+                let newAct = await genericService.getAct(act.name);
+                newAct.startDate = new Date();
+                await scheduleAct(crID, newAct);
+            }
+            else io.to(socket.id).emit('start-activity-failed');
         }
-        else io.to(socket.id).emit('start-activity-failed');
-        socket.disconnect();
+        catch(err)
+        {
+            console.error(err);
+        }
+        finally
+        {
+            socket.disconnect();
+        }
     });
 });
 
@@ -71,28 +81,42 @@ function canGo(crID: string, act: Activity): boolean
 
 async function rebuildOngoingActs()
 {
-    let crs = await crService.getAllCreatures();
-    crs.forEach(async cr =>
+    try
     {
-        if (cr.currentAct)
+        let crs = await crService.getAllCreatures();
+        crs.forEach(async cr =>
         {
-            const endDate = calcEndDate(cr.currentAct.startDate, cr.currentAct.duration);
-            if (endDate > new Date())
+            if (cr.currentAct)
             {
-                await scheduleAct(cr.crID, cr.currentAct);
+                const endDate = calcEndDate(cr.currentAct.startDate, cr.currentAct.duration);
+                if (endDate > new Date())
+                {
+                    await scheduleAct(cr.crID, cr.currentAct);
+                }
+                else
+                {
+                    await finishAct(cr.crID, cr.currentAct);
+                }
             }
-            else
-            {
-                await finishAct(cr.crID, cr.currentAct);
-            }
-        }
-    });
+        });
+    }
+    catch(err)
+    {
+        console.error(err);
+    }
 }
 
 async function scheduleAct(crID: string, act: Activity)
 {
-    crService.setAct(crID, act);
-    actMap.set(crID, schedule.scheduleJob(calcEndDate(act.startDate, act.duration), async () => { finishAct(crID, act) }));
+    try
+    {
+        crService.setAct(crID, act);
+        actMap.set(crID, schedule.scheduleJob(calcEndDate(act.startDate, act.duration), async () => { finishAct(crID, act) }));
+    }
+    catch(err)
+    {
+        console.error(err);
+    }
 }
 
 function calcEndDate(startDate: Date, duration: number): Date
@@ -102,13 +126,20 @@ function calcEndDate(startDate: Date, duration: number): Date
 
 async function finishAct(crID: string, act: Activity)
 {
-    let cr = await crService.getCreatureById(crID);
-    const noti = await resolveAct(cr, act);
-    await crService.updateCreature(crID, cr);
-    await userService.sendNotification(cr.ownedBy, noti);
-
-    actMap.delete(crID);
-    await crService.setAct(crID);
+    try
+    {
+        let cr = await crService.getCreatureById(crID);
+        const noti = await resolveAct(cr, act);
+        await crService.updateCreature(crID, cr);
+        await userService.sendNotification(cr.ownedBy, noti);
+    
+        actMap.delete(crID);
+        await crService.setAct(crID);
+    }
+    catch(err)
+    {
+        console.error(err);
+    }
 }
 
 server.listen(1100, () => {
