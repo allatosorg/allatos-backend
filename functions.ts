@@ -63,15 +63,15 @@ io.on('connection', (socket: any) =>
             switch (which)
             {
                 case 'str':
-                    cr.str++;
+                    if (cr.str < 20) cr.str++;
                     break;
 
                 case 'agi':
-                    cr.agi++;
+                    if (cr.agi < 20) cr.agi++;
                     break;
 
                 case 'int':
-                    cr.int++;
+                    if (cr.int < 20) cr.int++;
                     break;
 
                 default:
@@ -80,9 +80,9 @@ io.on('connection', (socket: any) =>
             cr.lvlup--;
 
             await crService.updateCreature(crID, cr);
-            socket.disconnect();
         }
-        else socket.disconnect();
+        
+        socket.disconnect();
     });
 
     socket.on('create-creature', async (uid: string) =>
