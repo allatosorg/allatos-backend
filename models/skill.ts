@@ -45,6 +45,10 @@ export class Skill
                             this.description += "Heavy: " + value + "\n";
                             break;
 
+                        case 'selfDmg':
+                            this.description += "Deal " + this.effects.get('selfDmg') + " damage to self.\n";
+                            break;
+
                         case 'combo':
                             this.description += "Combo: ";
                             if (value.has('dmg')) this.description += "+" + value.get('dmg') + " damage. ";

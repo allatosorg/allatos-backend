@@ -460,6 +460,7 @@ export class BattleSession
     }
 
     //send 1 for every action-happened
+    //TODO: combine action-happened and sendSnapshot
     sendSnapshot()
     {
         const cr1SkillsLength = this.crs[0].skills.length;
@@ -569,6 +570,10 @@ export class BattleSession
                 if (skill.effects.has('heavy'))
                 {
                     this.crs[opponent].fatigue += skill.effects.get('heavy');
+                }
+                if (skill.effects.has('selfDmg'))
+                {
+                    this.hit(this.crs[actor], this.crs[actor], skill.effects.get('selfDmg'));
                 }
 
                 this.hit(this.crs[actor], this.crs[opponent], skill.effects.get('dmg'), skill);

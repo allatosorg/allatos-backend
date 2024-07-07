@@ -91,11 +91,11 @@ const actEventTable =
     ],
     'Visit the Magical Pond':
     [
-        ['Blessed by spirit', 0.15]
+        ['Blessed by spirit', 0.11]
     ]
 }
 
-
+/* -------------------------------------------------- EVENT DEFINITIONS --------------------------------------------------- */
 let eventsMap = new Map<string, Function>
 ([
     ['Blessed by spirit', (act: Activity, cr: ServerCreature) =>

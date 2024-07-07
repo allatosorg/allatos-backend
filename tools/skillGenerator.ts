@@ -48,7 +48,7 @@ let fatCost = 0;
 let name: string;
 let description = '';
 let skills = [];
-let rarity = 0; //right now this property is meaningless
+let rarity = -1;
 
 //TODO: separate functions for adding each effect, these could be used for modifying skills too (after theyve already been generated)
 export function generateSkill(c: boolean, r: boolean, l: boolean, type = 'random'): Skill
@@ -56,41 +56,25 @@ export function generateSkill(c: boolean, r: boolean, l: boolean, type = 'random
     effects = new Map<string, any>;
     fatCost = 0;
     skills = [];
-
     if (type === 'random')
     {
         const types = ['attack', 'block'];
         type = types[rndInt(0, 1)];
     }
 
+    initCardBase(type);
     switch(type)
     {
         case 'attack':
-            effects.set('dmg', 3); 
-            fatCost = 11;
-            selfTarget = false;
-
             loadAttacks(c, r, l);
-
             break;
-
-
 
         case 'block':
-            effects.set('block', 2);
-            fatCost = 3;
-            selfTarget = true;
-
             loadBlocks(c, r, l);
-
             break;
 
-
-
         case 'trick':
-
             loadTricks(c, r, l);
-
             break;
 
         default:
@@ -105,26 +89,7 @@ export function generateSkillByName(type: string, name: string): Skill
 {
     effects = new Map<string, any>;
     fatCost = 0;
-    switch(type)
-    {
-        case 'attack':
-            effects.set('dmg', 3); 
-            fatCost = 11;
-            selfTarget = false;
-
-            break;
-
-
-        case 'block':
-            effects.set('block', 2);
-            fatCost = 3;
-            selfTarget = true;
-
-            break;
-
-        default:
-            break;
-    }
+    initCardBase(type);
 
     allSkills.get(name)();
     return new Skill(type, selfTarget, effects, fatCost, rarity, name);
@@ -152,6 +117,7 @@ function loadAttacks(c: boolean, r: boolean, l: boolean)
         skills.push(allSkills.get("Twin Strike"));
         skills.push(allSkills.get("Debilitate"));
         skills.push(allSkills.get("Reckless Strike"));
+        skills.push(allSkills.get("Wild Out"));
     }
 
     if (r)
@@ -219,16 +185,30 @@ const allSkills = new Map<string, Function>
     ["Strike", () =>
     {
         name = "Strike";
+        rarity = 0;
 
-        const x = rndInt(4, 6);
-        fatCost -= 6 - x;
-        effects.set('dmg', effects.get('dmg') + x + 4);
+        const x = rndInt(0, 2);
+        fatCost -= 2 - x;
+        effects.set('dmg', effects.get('dmg') + x + 8);
     }],
 
+    //+11-15 dmg, +3-7 selfDmg
+    ["Wild Out", () =>
+    {
+        name = "Strike";
+        rarity = 0;
+
+        const x = rndInt(0, 4);
+        fatCost += x;
+        effects.set('selfDmg', x + 3);
+        effects.set('dmg', effects.get('dmg') + x + 11);
+    }],
+        
     //+4 dmg, +9-11 heavy
     ["Heavy Attack", () =>
     {
         name = "Heavy Attack";
+        rarity = 0;
 
         const x = rndInt(4, 6);
         fatCost -= 6 - x;
@@ -240,6 +220,7 @@ const allSkills = new Map<string, Function>
     ["Shred", () =>
     {
         name = "Shred";
+        rarity = 0;
 
         const x = rndInt(4, 7);
         fatCost -= 6 - x;
@@ -251,6 +232,7 @@ const allSkills = new Map<string, Function>
     ["Twin Strike", () =>
     {
         name = "Twin Strike";
+        rarity = 0;
 
         const x = rndInt(0, 3);
         fatCost += 2*x + 2;
@@ -262,6 +244,7 @@ const allSkills = new Map<string, Function>
     ["Debilitate", () =>
     {
         name = "Debilitate";
+        rarity = 0;
 
         const x = rndInt(0, 2);
         fatCost += x;
@@ -273,6 +256,7 @@ const allSkills = new Map<string, Function>
     ["Reckless Strike", () =>
     {
         name = "Reckless Strike";
+        rarity = 0;
 
         const x = rndInt(0, 2);
         fatCost += 2*x;
@@ -284,6 +268,7 @@ const allSkills = new Map<string, Function>
     ["Body Slam", () =>
     {
         name = "Body Slam";
+        rarity = 1;
 
         effects.delete('dmg');
     }],
@@ -292,6 +277,7 @@ const allSkills = new Map<string, Function>
     ["Overwhelm", () =>
     {
         name = "Overwhelm";
+        rarity = 1;
 
         const x = rndInt(11, 14);
         fatCost -= 12 - x;
@@ -302,6 +288,7 @@ const allSkills = new Map<string, Function>
     ["Punishing Blow", () =>
     {
         name = "Punishing Blow";
+        rarity = 1;
 
         const x = rndInt(5, 7);
         fatCost += x - 3;
@@ -312,6 +299,7 @@ const allSkills = new Map<string, Function>
     ["Brutal Swing", () =>
     {
         name = "Brutal Swing";
+        rarity = 2;
 
         const x = rndInt(0, 5);
         fatCost += 29 + x;
@@ -326,6 +314,7 @@ const allSkills = new Map<string, Function>
     ["Block", () =>
     {
         name = "Block";
+        rarity = 0;
 
         const x = rndInt(3, 5);
         fatCost -= 5 - x;
@@ -336,6 +325,7 @@ const allSkills = new Map<string, Function>
     ["Barricade", () =>
     {
         name = "Barricade";
+        rarity = 0;
 
         const x = rndInt(4, 6);
         fatCost -= 5 - x;
@@ -346,6 +336,7 @@ const allSkills = new Map<string, Function>
     ["Riposte", () =>
     {
         name = "Riposte";
+        rarity = 0;
 
         const x = rndInt(2, 4);
         fatCost -= 4 - x;
@@ -357,6 +348,7 @@ const allSkills = new Map<string, Function>
     ["Stand Ready", () =>
     {
         name = "Stand Ready";
+        rarity = 0;
 
         const x = rndInt(1, 2);
         fatCost += x;
@@ -368,6 +360,7 @@ const allSkills = new Map<string, Function>
     ["Warm Up", () =>
     {
         name = "Warm Up";
+        rarity = 0;
 
         const x = rndInt(0, 1);
         fatCost += 9 + x;
@@ -379,6 +372,7 @@ const allSkills = new Map<string, Function>
     ["Throw Off Balance", () =>
     {
         name = "Throw Off Balance";
+        rarity = 1;
 
         const x = rndInt(0, 6);
         fatCost += 7 - x;
@@ -390,6 +384,7 @@ const allSkills = new Map<string, Function>
     ["Take The High Ground", () =>
     {
         name = "Take The High Ground";
+        rarity = 1;
 
         const x = rndInt(0, 2);
         effects.set('block', effects.get('block') + x + 3);
@@ -399,6 +394,7 @@ const allSkills = new Map<string, Function>
     ["Bolster Defences", () =>
     {
         name = "Bolster Defences";
+        rarity = 1;
 
         const x = rndInt(1, 2);
         fatCost += 9 + x;
@@ -410,6 +406,7 @@ const allSkills = new Map<string, Function>
     ["Shake It Off", () =>
     {
         name = "Shake It Off";
+        rarity = 1;
 
         const x = rndInt(0, 1);
         fatCost += x;
@@ -420,23 +417,49 @@ const allSkills = new Map<string, Function>
     ["Unrelenting Defence", () =>
     {
         name = "Unrelenting Defence";
+        rarity = 2;
 
         effects.delete('block');
         effects.set('steadfast', true);
     }],
 
-    //+40-43 block, apply debuffs to self
+    //+35-38 block, apply debuffs to self
     ["Last Resort", () =>
     {
         name = "Last Resort";
+        rarity = 2;
 
         const x = rndInt(0, 3);
         fatCost += x;
-        effects.set('block', effects.get('block') + x + 35);
+        effects.set('block', effects.get('block') + x + 30);
         effects.set("Bolstered", [-6, true]);
         effects.set("Weakened", [3, true]);
     }],
 ]);
+
+function initCardBase(type: string)
+{
+    switch(type)
+    {
+        case 'attack':
+            effects.set('dmg', 3);
+            fatCost = 11;
+            selfTarget = false;
+
+            break;
+
+
+        case 'block':
+            effects.set('block', 2);
+            fatCost = 3;
+            selfTarget = true;
+
+            break;
+
+        default:
+            break;
+    }
+}
 
 function rndInt(min: number, max: number): number
 {
