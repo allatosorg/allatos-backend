@@ -1,3 +1,5 @@
+import { allStatuses } from "./skillEffects";
+
 export class Skill
 {
     type: string;
@@ -31,130 +33,12 @@ export class Skill
         switch(this.type)
         {
             case 'attack':
-                if (this.effects.has('dmg')) this.description += "Deal " + this.effects.get('dmg') + " damage.\n";
-
-                for (let [effect, value] of this.effects)
-                {
-                    switch(effect)
-                    {
-                        case 'shred':
-                            this.description += "Shred " + value + " block.\n";
-                            break;
-
-                        case 'heavy':
-                            this.description += "Heavy: " + value + "\n";
-                            break;
-
-                        case 'selfDmg':
-                            this.description += "Deal " + this.effects.get('selfDmg') + " damage to self.\n";
-                            break;
-
-                        case 'combo':
-                            this.description += "Combo: ";
-                            if (value.has('dmg')) this.description += "+" + value.get('dmg') + " damage. ";
-                            if (value.has('heavy')) this.description += "+" + value.get('heavy') + " heavy. ";
-                            this.description += "\n";
-                            break;
-                    
-
-                        case "Weakened":
-                            this.description += "Apply " + value[0] + " Weakened";
-                            if (value[1])
-                            {
-                                this.description += " to self.\n";
-                            }
-                            else this.description += ".\n";
-                            break;
-
-                        case "Vulnerable":
-                            this.description += "Apply " + value[0] + " Vulnerable";
-                            if (value[1])
-                            {
-                                this.description += " to self.\n";
-                            }
-                            else this.description += ".\n";
-                            break;
-
-                        case "Pumped":
-                            this.description += "Apply " + value[0] + " Pumped";
-                            if (value[1])
-                            {
-                                this.description += " to self.\n";
-                            }
-                            else this.description += ".\n";
-                            break;
-
-                        default:
-                            break;
-                    }
-                }
-                break;
+                this.addBasicEffects(this.effects);
+                this.addStatusApplyText(this.effects);
 
             case 'block':
-                if (this.effects.has('block')) this.description += "Gain " + this.effects.get('block') + " block.\n";
-
-                for (let [effect, value] of this.effects)
-                {
-                    switch(effect)
-                    {
-                        case 'stance':
-                            this.description += "Stance: ";
-                            if (value.has('block')) this.description += "+" + value.get('block') + " block. ";
-                            this.description += "\n";
-                            break;
-
-                        case 'steadfast':
-                            this.description += "Steadfast\n";
-                            break;
-
-                        case 'retaliate':
-                            this.description += "Retaliate: ";
-                            if (value.has('dmg')) this.description += "Deal " + value.get('dmg') + " damage. ";
-                            this.description += "\n";
-                            break;
-                        
-
-                        case "Weakened":
-                            this.description += "Apply " + value[0] + " Weakened";
-                            if (value[1])
-                            {
-                                this.description += " to self.\n";
-                            }
-                            else this.description += ".\n";
-                            break;
-
-                        case "Vulnerable":
-                            this.description += "Apply " + value[0] + " Vulnerable";
-                            if (value[1])
-                            {
-                                this.description += " to self.\n";
-                            }
-                            else this.description += ".\n";
-                            break;
-
-                        case "Pumped":
-                            this.description += "Apply " + value[0] + " Pumped";
-                            if (value[1])
-                            {
-                                this.description += " to self.\n";
-                            }
-                            else this.description += ".\n";
-                            break;
-
-                        case "Bolstered":
-                            this.description += "Apply " + value[0] + " Bolstered";
-                            if (value[1])
-                            {
-                                this.description += " to self.\n";
-                            }
-                            else this.description += ".\n";
-                            break;
-
-                        default:
-                            break;
-                    }
-                }
-                break;
+                this.addBasicEffects(this.effects);
+                this.addStatusApplyText(this.effects);
 
             default:
                 break;
@@ -189,6 +73,86 @@ export class Skill
 
             default:
                 break;
+        }
+    }
+
+    //dont break line for sub-effects (combo, stance etc)
+    addStatusApplyText(effects: Map<string, any>, breakLine = true)
+    {
+        allStatuses.forEach((st) =>
+        {
+            if (effects.has(st))
+            {
+                this.description += "Apply " + effects.get(st)[0] + " " + st;
+                if (effects.get(st)[1])
+                {
+                    this.description += " to self.";
+                }
+                else this.description += ".";
+            }
+
+            breakLine ? this.description += "\n" : this.description += " ";
+        });
+    }
+
+    //dont break line for sub-effects (combo, stance etc)
+    addBasicEffects(effects: Map<string, any>, breakLine = true)
+    {
+        if (effects.has('dmg'))
+        {
+            this.description += "Deal " + this.effects.get('dmg') + " damage.\n";
+            breakLine ? this.description += "\n" : this.description += " ";
+        }
+        if (effects.has('shred'))
+        {
+            this.description += "Shred " + this.effects.get('shred') + " block.\n"
+            breakLine ? this.description += "\n" : this.description += " ";
+        }
+        if (effects.has('shred'))
+        {
+            this.description += "Shred " + this.effects.get('shred') + " block.\n"
+            breakLine ? this.description += "\n" : this.description += " ";
+        }
+        if (effects.has('heavy'))
+        {
+            this.description += "Heavy: " + this.effects.get('heavy') + "\n";
+            breakLine ? this.description += "\n" : this.description += " ";
+        }
+        if (effects.has('selfDmg'))
+        {
+            this.description += "Deal " + this.effects.get('selfDmg') + " damage to self.\n";
+            breakLine ? this.description += "\n" : this.description += " ";
+        }
+        if (effects.has('combo'))
+        {
+            this.description += "Combo: ";
+            this.addBasicEffects(this.effects.get('combo').effects, false);
+            this.addStatusApplyText(this.effects.get('combo').effects, false);
+            this.description += "\n";
+        }
+
+        if (effects.has('block'))
+        {
+            this.description += "Gain " + this.effects.get('block') + " block.\n";
+            breakLine ? this.description += "\n" : this.description += " ";
+        }
+        if (effects.has('retaliate'))
+        {
+            this.description += "Retaliate: ";
+            this.addBasicEffects(this.effects.get('retaliate').effects, false);
+            this.addStatusApplyText(this.effects.get('retaliate').effects, false);
+            this.description += "\n";
+        }
+        if (effects.has('stance'))
+        {
+            this.description += "Stance: ";
+            this.addBasicEffects(this.effects.get('stance').effects, false);
+            this.addStatusApplyText(this.effects.get('stance').effects, false);
+            this.description += "\n";
+        }
+        if (effects.has('steadfast'))
+        {
+            this.description += "Steadfast\n";
         }
     }
 

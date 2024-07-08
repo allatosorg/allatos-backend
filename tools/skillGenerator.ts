@@ -306,6 +306,15 @@ const allSkills = new Map<string, Function>
         effects.set('dmg', effects.get('dmg') + 25 + x);
     }],
 
+    //inflict Weakened, combo: inflict -2 bolstered
+    ["Expose Weakness", () =>
+    {
+        name = "Expose Weakness";
+        rarity = 0;
+
+        effects.set("Weakened", [1, false]);
+        effects.set('combo', new Map<string, any>([ ['bolstered', [-2, false]] ]));
+    }],
 
 
     /* ------------------------- BLOCKS -------------------------- */

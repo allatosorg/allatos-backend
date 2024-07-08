@@ -1,5 +1,4 @@
 import { BattleSession } from "./battleSession";
-import { Creature } from "./models/creature";
 import { ServerCreature } from "./models/serverCreature";
 import { CrService } from "./db_services/crService";
 import * as express from "express";

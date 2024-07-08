@@ -8,7 +8,7 @@ import { UserService } from "./db_services/userService";
 import { GenericService } from "./db_services/genericService";
 import * as express from "express";
 import { createServer } from "https";
-import { Server, Socket} from "socket.io"
+import { Server, Socket} from "socket.io";
 import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
 import * as fs from 'fs';
 

@@ -1,8 +1,6 @@
 import { ServerCreature } from "./models/serverCreature";
-import { Creature } from "./models/creature";
 import { Skill } from "./models/skill";
-import { Status } from "./models/status";
-import { Trait } from "./models/trait";
+import { allStatuses } from "./models/skillEffects";
 
 export class BattleSession
 {
@@ -642,21 +640,12 @@ export class BattleSession
     //apply statuses from skill
     applyStatuses(skill: Skill, actor: ServerCreature, opp: ServerCreature)
     {
-        if (skill.effects.has("Weakened"))
+        for (let key of skill.effects.keys())
         {
-            skill.effects.get("Weakened")[1] ? actor.addStatus("Weakened", skill.effects.get("Weakened")[0]) : opp.addStatus("Weakened", skill.effects.get("Weakened")[0]);
-        }
-        if (skill.effects.has("Vulnerable"))
-        {
-            skill.effects.get("Vulnerable")[1] ? actor.addStatus("Vulnerable", skill.effects.get("Vulnerable")[0]) : opp.addStatus("Vulnerable", skill.effects.get("Vulnerable")[0]);
-        }
-        if (skill.effects.has("Pumped"))
-        {
-            skill.effects.get("Pumped")[1] ? actor.addStatus("Pumped", skill.effects.get("Pumped")[0]) : opp.addStatus("Pumped", skill.effects.get("Pumped")[0]);
-        }
-        if (skill.effects.has("Bolstered"))
-        {
-            skill.effects.get("Bolstered")[1] ? actor.addStatus("Bolstered", skill.effects.get("Bolstered")[0]) : opp.addStatus("Bolstered", skill.effects.get("Bolstered")[0]);
+            if (allStatuses.includes(key))
+            {
+                skill.effects.get(key)[1] ? actor.addStatus(key, skill.effects.get(key)[0]) : opp.addStatus(key, skill.effects.get(key)[0]);
+            }
         }
     }
 }
