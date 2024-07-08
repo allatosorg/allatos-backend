@@ -195,7 +195,7 @@ const allSkills = new Map<string, Function>
     //+11-15 dmg, +3-7 selfDmg
     ["Wild Out", () =>
     {
-        name = "Strike";
+        name = "Wild Out";
         rarity = 0;
 
         const x = rndInt(0, 4);
