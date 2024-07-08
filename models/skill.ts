@@ -99,27 +99,27 @@ export class Skill
     {
         if (effects.has('dmg'))
         {
-            this.description += "Deal " + this.effects.get('dmg') + " damage.\n";
+            this.description += "Deal " + this.effects.get('dmg') + " damage.";
             breakLine ? this.description += "\n" : this.description += " ";
         }
         if (effects.has('shred'))
         {
-            this.description += "Shred " + this.effects.get('shred') + " block.\n"
+            this.description += "Shred " + this.effects.get('shred') + " block."
             breakLine ? this.description += "\n" : this.description += " ";
         }
         if (effects.has('shred'))
         {
-            this.description += "Shred " + this.effects.get('shred') + " block.\n"
+            this.description += "Shred " + this.effects.get('shred') + " block."
             breakLine ? this.description += "\n" : this.description += " ";
         }
         if (effects.has('heavy'))
         {
-            this.description += "Heavy: " + this.effects.get('heavy') + "\n";
+            this.description += "Heavy: " + this.effects.get('heavy');
             breakLine ? this.description += "\n" : this.description += " ";
         }
         if (effects.has('selfDmg'))
         {
-            this.description += "Deal " + this.effects.get('selfDmg') + " damage to self.\n";
+            this.description += "Deal " + this.effects.get('selfDmg') + " damage to self.";
             breakLine ? this.description += "\n" : this.description += " ";
         }
         if (effects.has('combo'))
@@ -132,7 +132,7 @@ export class Skill
 
         if (effects.has('block'))
         {
-            this.description += "Gain " + this.effects.get('block') + " block.\n";
+            this.description += "Gain " + this.effects.get('block') + " block.";
             breakLine ? this.description += "\n" : this.description += " ";
         }
         if (effects.has('retaliate'))
