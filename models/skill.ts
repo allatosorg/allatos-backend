@@ -126,8 +126,8 @@ export class Skill
         if (effects.has('combo'))
         {
             this.description += "Combo: ";
-            this.addBasicEffects(effects.get('combo').effects, false);
-            this.addStatusApplyText(effects.get('combo').effects, false);
+            this.addBasicEffects(effects.get('combo'), false);
+            this.addStatusApplyText(effects.get('combo'), false);
             this.description += "\n";
         }
 
@@ -139,15 +139,15 @@ export class Skill
         if (effects.has('retaliate'))
         {
             this.description += "Retaliate: ";
-            this.addBasicEffects(effects.get('retaliate').effects, false);
-            this.addStatusApplyText(effects.get('retaliate').effects, false);
+            this.addBasicEffects(effects.get('retaliate'), false);
+            this.addStatusApplyText(effects.get('retaliate'), false);
             this.description += "\n";
         }
         if (effects.has('stance'))
         {
             this.description += "Stance: ";
-            this.addBasicEffects(effects.get('stance').effects, false);
-            this.addStatusApplyText(effects.get('stance').effects, false);
+            this.addBasicEffects(effects.get('stance'), false);
+            this.addStatusApplyText(effects.get('stance'), false);
             this.description += "\n";
         }
         if (effects.has('steadfast'))
