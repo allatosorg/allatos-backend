@@ -89,9 +89,8 @@ export class Skill
                     this.description += " to self.";
                 }
                 else this.description += ".";
+                breakLine ? this.description += "\n" : this.description += " ";
             }
-
-            breakLine ? this.description += "\n" : this.description += " ";
         });
     }
 
