@@ -295,11 +295,11 @@ export class BattleSession
             this.crs[actor].statuses = this.crs[actor].statuses.filter((s) => !s.countsDown || s.counter > 0);
 
             //apply end of turn status gains
-            if (this.crs[i].fatigue >= this.crs[i].stamina)
+            if (this.crs[actor].fatigue >= this.crs[i].stamina)
             {
-                this.crs[i].addStatus("Fatigued", 1);
-                this.crs[i].addStatus("Vulnerable", 1);
-                this.crs[i].fatigue -= this.crs[i].stamina;
+                this.crs[actor].addStatus("Fatigued", 1);
+                this.crs[actor].addStatus("Vulnerable", 1);
+                this.crs[actor].fatigue -= this.crs[i].stamina;
             }
 
             if (this.crs[actor].turnInfo.has('offBalance'))
