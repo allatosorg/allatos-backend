@@ -35,10 +35,12 @@ export class Skill
             case 'attack':
                 this.addBasicEffects(this.effects);
                 this.addStatusApplyText(this.effects);
-
+                break;
+                
             case 'block':
                 this.addBasicEffects(this.effects);
                 this.addStatusApplyText(this.effects);
+                break;
 
             default:
                 break;
@@ -100,11 +102,6 @@ export class Skill
         if (effects.has('dmg'))
         {
             this.description += "Deal " + this.effects.get('dmg') + " damage.";
-            breakLine ? this.description += "\n" : this.description += " ";
-        }
-        if (effects.has('shred'))
-        {
-            this.description += "Shred " + this.effects.get('shred') + " block."
             breakLine ? this.description += "\n" : this.description += " ";
         }
         if (effects.has('shred'))
