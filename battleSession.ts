@@ -14,6 +14,7 @@ export class BattleSession
     //gameStates -> 0: initializing || 10: turn start || 20: 1-1 skills picked (reveal phase) || 30: 2-2 skills picked (action phase) || 40: turn ending
     gameState = 0; 
     playerOneFirst: boolean; //who won ini roll, player one = players[0], player two = players[1]
+    skillsPicked: Array<Array<Skill>> = [[], []];
     skillsUsed: Array<Array<Skill>> = [[], []];
     canPicks: Array<boolean> = [];
 
@@ -97,14 +98,14 @@ export class BattleSession
                 {
                     pickedBy = this.crs[0];
                     skill = pickedBy.skills[index];
-                    this.skillsUsed[0].push(skill);
+                    this.skillsPicked[0].push(skill);
                     this.canPicks[0] = false;
                 }
                 else
                 {
                     pickedBy = this.crs[1];
                     skill = pickedBy.skills[index];
-                    this.skillsUsed[1].push(skill);
+                    this.skillsPicked[1].push(skill);
                     this.canPicks[1] = false;
                 }
                 skill.usedByID = pickedBy.crID;
@@ -163,8 +164,8 @@ export class BattleSession
     {
         this.gameState = 20;
 
-        this.combatLog += this.crs[0].name + " picked skill:\n" + this.skillsUsed[0][0].description + "\n";
-        this.combatLog += this.crs[1].name + " picked skill:\n" + this.skillsUsed[1][0].description + "\n";
+        this.combatLog += this.crs[0].name + " picked skill:\n" + this.skillsPicked[0][0].description + "\n";
+        this.combatLog += this.crs[1].name + " picked skill:\n" + this.skillsPicked[1][0].description + "\n";
         if (!(this.crs[0].hasStatus("Fatigued"))) this.canPicks[0] = true;
         if (!(this.crs[1].hasStatus("Fatigued"))) this.canPicks[1] = true;
 
@@ -175,8 +176,8 @@ export class BattleSession
         }
         else
         {
-            this.sockets[0].emit('skill-revealed', this.skillsUsed[1][0]);
-            this.sockets[1].emit('skill-revealed', this.skillsUsed[0][0]);
+            this.sockets[0].emit('skill-revealed', this.skillsPicked[1][0]);
+            this.sockets[1].emit('skill-revealed', this.skillsPicked[0][0]);
             this.sendGameState();
         }
     }
@@ -189,49 +190,47 @@ export class BattleSession
         this.skillsOrdered = [];
 
         //activate blocks
-        for (let i = 0; i < this.skillsUsed[0].length; i++)
+        for (let i = 0; i < this.skillsPicked[0].length; i++)
         {
-            if (this.skillsUsed[0][i].type === 'block')
+            if (this.skillsPicked[0][i].type === 'block')
             {
-                this.useSkill(0, 1, this.skillsUsed[0][i]);
+                this.useSkill(0, 1, this.skillsPicked[0][i]);
 
-                this.skillsUsed[0].splice(i, 1);
+                this.skillsPicked[0].splice(i, 1);
                 i--;
             }
         }
 
-        for (let i = 0; i < this.skillsUsed[1].length; i++)
+        for (let i = 0; i < this.skillsPicked[1].length; i++)
         {
-            if (this.skillsUsed[1][i].type === 'block')
+            if (this.skillsPicked[1][i].type === 'block')
             {
-                this.useSkill(1, 0, this.skillsUsed[1][i]);
-                this.skillsUsed[1].splice(i, 1);
+                this.useSkill(1, 0, this.skillsPicked[1][i]);
+                this.skillsPicked[1].splice(i, 1);
                 i--;
             }
         }
-        this.combatLog += "Total blocks:\n" + this.crs[0].name + " - " + this.crs[0].block + "\n" + this.crs[1].name + " - " + this.crs[1].block + "\n";
-        this.sendLog();
 
         this.gameState = 35;
         //construct attack skill order and activate them
         let p1turn = this.playerOneFirst;
-        while (0 < this.skillsUsed[0].length + this.skillsUsed[1].length)
+        while (0 < this.skillsPicked[0].length + this.skillsPicked[1].length)
         {
             if (p1turn)
             {
-                if (this.skillsUsed[0].length > 0)
+                if (this.skillsPicked[0].length > 0)
                 {
-                    this.skillsOrdered.push(this.skillsUsed[0].shift());
+                    this.skillsOrdered.push(this.skillsPicked[0].shift());
                 }
-                else this.skillsOrdered.push(this.skillsUsed[1].shift());
+                else this.skillsOrdered.push(this.skillsPicked[1].shift());
             }
             else
             {
-                if (this.skillsUsed[1].length > 0)
+                if (this.skillsPicked[1].length > 0)
                 {
-                    this.skillsOrdered.push(this.skillsUsed[1].shift());
+                    this.skillsOrdered.push(this.skillsPicked[1].shift());
                 }
-                else this.skillsOrdered.push(this.skillsUsed[0].shift());
+                else this.skillsOrdered.push(this.skillsPicked[0].shift());
 
             }
             p1turn = !p1turn;
@@ -347,12 +346,15 @@ export class BattleSession
 
     hit(actor: ServerCreature, target: ServerCreature, dmg: number, skill?: Skill)
     {
+        if (actor.hasStatus("Strengthened")) dmg += actor.getStatus("Strengthened").counter;
+
         if (actor.hasStatus("Weakened")) dmg *= 0.75;
         if (actor.hasStatus("Pumped")) dmg *= 1.25;
         if (target.hasStatus("Vulnerable")) dmg *= 1.25;
 
         dmg = Math.floor(dmg);
-
+        if (dmg < 0) dmg = 0;
+        
         if (dmg > target.block)
         {
             //hit
@@ -631,6 +633,8 @@ export class BattleSession
         this.crs[actor].fatigue += skill.fatCost;
         this.crs[actor].turnInfo.set('lastSkill', skill);
         this.crs[actor].grave.push(ogSkill);
+        let whichPlayer = this.crs[0].crID === skill.usedByID ? 0 : 1;
+        this.skillsUsed[whichPlayer].push(skill);
 
         this.io.to(this.roomID).emit('action-happened', {type: ''});
         this.sendSnapshot();

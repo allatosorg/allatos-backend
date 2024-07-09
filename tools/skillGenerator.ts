@@ -130,6 +130,7 @@ function loadAttacks(c: boolean, r: boolean, l: boolean)
     if (l)
     {
         skills.push(allSkills.get("Brutal Swing"));
+        skills.push(allSkills.get("Expose Weakness"));
     }
 }
 
@@ -138,6 +139,7 @@ function loadBlocks(c: boolean, r: boolean, l: boolean)
     if (c)
     {
         skills.push(allSkills.get("Block"));
+        skills.push(allSkills.get("Blockade"));
         skills.push(allSkills.get("Barricade"));
         skills.push(allSkills.get("Riposte"));
         skills.push(allSkills.get("Stand Ready"));
@@ -151,6 +153,7 @@ function loadBlocks(c: boolean, r: boolean, l: boolean)
         skills.push(allSkills.get("Take The High Ground"));
         skills.push(allSkills.get("Bolster Defences"));
         skills.push(allSkills.get("Shake It Off"));
+        skills.push(allSkills.get("Channel Rage"));
     }
 
     if (l)
@@ -325,9 +328,20 @@ const allSkills = new Map<string, Function>
         name = "Block";
         rarity = 0;
 
-        const x = rndInt(3, 5);
-        fatCost -= 5 - x;
-        effects.set('block', effects.get('block') + x + 2);
+        const x = rndInt(0, 2);
+        fatCost -= 2 - x;
+        effects.set('block', effects.get('block') + x + 5);
+    }],
+
+    //+10-13 block
+    ["Blockade", () =>
+    {
+        name = "Blockade";
+        rarity = 0;
+
+        const x = rndInt(0, 3);
+        fatCost += 12 + x;
+        effects.set('block', effects.get('block') + x + 10);
     }],
 
     //stance: 7-9 block
@@ -408,6 +422,16 @@ const allSkills = new Map<string, Function>
         const x = rndInt(1, 2);
         fatCost += 9 + x;
         effects.set('block', effects.get('block') + x);
+        effects.set("Bolstered", [2, true]);
+    }],
+
+    //apply 2 strengthened to self
+    ["Channel Rage", () =>
+    {
+        name = "Channel Rage";
+        rarity = 1;
+
+        fatCost += 11;
         effects.set("Bolstered", [2, true]);
     }],
     
