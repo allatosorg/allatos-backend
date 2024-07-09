@@ -54,7 +54,7 @@ export class Skill
                 break;
 
             case "Body Slam":
-                this.description = "Deals damage equal to your block.";
+                this.description += "Deals damage equal to your block.";
                 break;
 
             case "Unrelenting Defence":
@@ -70,7 +70,7 @@ export class Skill
                 break;
 
             case "Shake It Off":
-                this.description = "Count down your status effects by 1.";
+                this.description += "Count down your status effects by 1.";
                 break;
 
             default:
