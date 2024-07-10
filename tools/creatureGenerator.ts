@@ -6,8 +6,8 @@ export function generateCreature(): ServerCreature
     let randomStr = rndInt(7, 14);
     let randomInt = rndInt(7, 14);
     let randomAgi = rndInt(7, 14);
-    let randomCon = rndInt(50, 70);
-    let randomStam = rndInt(75, 100);
+    let randomCon = rndInt(65, 85);
+    let randomStam = rndInt(80, 100);
     let randomIni = rndInt(50, 100);
 
     const startingSkills = generateStartingSkills();

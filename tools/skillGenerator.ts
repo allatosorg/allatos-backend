@@ -401,7 +401,7 @@ const allSkills = new Map<string, Function>
 
         const x = rndInt(1, 2);
         fatCost += x;
-        effects.set('steadfast', true);
+        effects.set("Steadfast", [1, true]);
         effects.set('block', effects.get('block') + x + 2);
     }],
 
@@ -436,7 +436,7 @@ const allSkills = new Map<string, Function>
         rarity = 1;
 
         const x = rndInt(0, 2);
-        fatCost += x;
+        fatCost += x + 4;
         effects.set('block', effects.get('block') + x + 3);
     }],
 
@@ -447,7 +447,7 @@ const allSkills = new Map<string, Function>
         rarity = 1;
 
         const x = rndInt(1, 2);
-        fatCost += 9 + x;
+        fatCost += 6 + x;
         effects.set('block', effects.get('block') + x);
         effects.set("Bolstered", [2, true]);
     }],
@@ -480,7 +480,7 @@ const allSkills = new Map<string, Function>
         rarity = 2;
 
         effects.delete('block');
-        effects.set('steadfast', true);
+        effects.set("Steadfast", [1, true]);
     }],
 
     //+35-38 block, apply debuffs to self

@@ -618,10 +618,6 @@ export class BattleSession
                         }
                     }
                 }
-                if (skill.effects.has('steadfast'))
-                {
-                    this.crs[actor].turnInfo.set('steadfast', true);
-                }
 
                 this.addBlock(this.crs[actor], skill.effects.get('block'), skill);
                 break;
