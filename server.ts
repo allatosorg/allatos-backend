@@ -33,8 +33,11 @@ io.on('connection', (socket: any) =>
   {
     socket.data.uid = uid;
     socket.data.crID = crID;
-    waiting.push(socket);
-    successCb();
+    if (!waiting.includes(socket))
+    {
+      waiting.push(socket);
+      successCb();
+    }
   });
 
   socket.on('disconnect', () =>

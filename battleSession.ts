@@ -310,7 +310,6 @@ export class BattleSession
                 this.crs[actor].addStatus("Vulnerable", 1);
                 this.crs[actor].fatigue -= this.crs[actor].stamina;
             }
-            console.log(this.skillsUsed[actor]);
             if (this.crs[actor].turnInfo.has('offBalance'))
             {
                 let fatSum = 0;
@@ -318,7 +317,7 @@ export class BattleSession
                 {
                     fatSum += s.fatCost;
                 });
-                if (this.crs[actor].turnInfo.get('offBalance') >= fatSum) this.crs[actor].addStatus("Vulnerable", 1);
+                if (this.crs[actor].turnInfo.get('offBalance') <= fatSum) this.crs[actor].addStatus("Vulnerable", 1);
             }
 
 
