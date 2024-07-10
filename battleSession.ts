@@ -377,7 +377,7 @@ export class BattleSession
             dmg = 0;
         }
         target.HP -= dmg;
-        if (skill.name === "Pummel") actor.block += dmg;
+        if (skill && skill.name === "Pummel") actor.block += dmg;
 
         //apply statuses from skill
         if (skill) this.applyStatuses(skill, actor, target);
