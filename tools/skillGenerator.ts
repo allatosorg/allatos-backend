@@ -436,6 +436,7 @@ const allSkills = new Map<string, Function>
         rarity = 1;
 
         const x = rndInt(0, 2);
+        fatCost += x;
         effects.set('block', effects.get('block') + x + 3);
     }],
 
