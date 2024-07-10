@@ -389,7 +389,7 @@ const allSkills = new Map<string, Function>
         const x = rndInt(0, 2);
         const y = rndInt(0, 3);
         fatCost -= 2 - x - y;
-        effects.set('block', effects.get('block') + x);
+        effects.set('block', effects.get('block') + x + 3);
         effects.set('retaliate', new Map<string, any>([ ['fatigue', y + 11] ]));
     }],
 
