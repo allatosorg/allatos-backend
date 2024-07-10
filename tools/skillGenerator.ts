@@ -308,18 +308,18 @@ const allSkills = new Map<string, Function>
         name = "Overwhelm";
         rarity = 1;
 
-        const x = rndInt(11, 14);
-        fatCost -= 12 - x;
-        effects.set('combo', new Map<string, any>([ ['heavy', x + 4] ]));
+        const x = rndInt(0, 3);
+        fatCost -= 3 - x;
+        effects.set('combo', new Map<string, any>([ ['heavy', x + 15] ]));
     }],
 
-    //+5-7 dmg, if opponent is at or over stam limit, +50% dmg
+    //+6-8 dmg, if opponent is at or over stam limit, +50% dmg
     ["Punishing Blow", () =>
     {
         name = "Punishing Blow";
         rarity = 1;
 
-        const x = rndInt(5, 7);
+        const x = rndInt(6, 8);
         fatCost += x - 3;
         effects.set('dmg', effects.get('dmg') + x);
     }],

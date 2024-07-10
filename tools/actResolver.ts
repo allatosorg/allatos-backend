@@ -48,6 +48,9 @@ export async function resolveAct(cr: ServerCreature, act: Activity): Promise<Not
 //give random number multiplied by between ~1 and ~2 (influenced by int stat)
 function rollXP(int: number, baseXP: number): number
 {
+    //hard cap just to be safe
+    if (int > 26) int = 26;
+
     let rand = Math.random()*20;
     let modi = 0;
     
@@ -83,7 +86,7 @@ const actEventTable =
 {
     'Climb the Mountains':
     [
-        ['Become stronger', 0.26]
+        ['Become stronger', 0.23]
     ],
     'Explore the Jungle':
     [
@@ -106,6 +109,7 @@ let eventsMap = new Map<string, Function>
             notiDescription += "You have been blessed by a magical spirit! You can learn a legendary skill: " + randomSkill.name + ". ";
         }
     ],
+
     ['Become stronger', async (act: Activity, cr: ServerCreature) =>
         {
             if (cr.getTraitNames().includes('Absolutely Jacked'))
@@ -134,6 +138,7 @@ let eventsMap = new Map<string, Function>
             }
         }
     ],
+
     ['Hidden treasure', (act: Activity, cr: ServerCreature) =>
         {
             if (rndInt(0, 1))
