@@ -46,7 +46,7 @@ io.on('connection', (socket: any) =>
                     try
                     {
                         await crService.learnSkill(crID, options[index]);
-                        await crService.deleteSkillPick(crID, index);
+                        await crService.deleteSkillPick(crID, 0);
                     }
                     catch(err)
                     {
@@ -60,7 +60,7 @@ io.on('connection', (socket: any) =>
     
                 socket.on('skill-pick-skipped', async () =>
                 {
-                    await crService.replaceSkillPicks(crID, cr.skillPicks);
+                    await crService.deleteSkillPick(crID, 0);
                     socket.disconnect();
                 });
             }
