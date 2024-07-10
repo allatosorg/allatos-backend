@@ -326,10 +326,10 @@ const allSkills = new Map<string, Function>
     ["Expose Weakness", () =>
     {
         name = "Expose Weakness";
-        rarity = 0;
+        rarity = 2;
 
         effects.set("Weakened", [1, false]);
-        effects.set('combo', new Map<string, any>([ ['bolstered', [-2, false]] ]));
+        effects.set('combo', new Map<string, any>([ ['Bolstered', [-2, false]] ]));
     }],
 
 
