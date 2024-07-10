@@ -91,7 +91,7 @@ const actEventTable =
     ],
     'Visit the Magical Pond':
     [
-        ['Blessed by spirit', 0.11]
+        ['Blessed by spirit', 0.14]
     ]
 }
 
