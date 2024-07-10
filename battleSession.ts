@@ -287,7 +287,15 @@ export class BattleSession
                 {
                     this.hit(this.crs[actor], this.crs[opp], this.crs[actor].turnInfo.get('retaliate').get('dmg'));
                 }
+                if (this.crs[actor].turnInfo.get('retaliate').has('fatigue'))
+                {
+                    this.crs[opp].fatigue += this.crs[actor].turnInfo.get('retaliate').get('fatigue');
+                }
             }
+            this.io.to(this.roomID).emit('action-happened', {type: ''});
+            this.sendSnapshot();
+
+            if (!this.crs[actor].hasStatus("Steadfast")) this.removeBlock(this.crs[actor], this.crs[actor].block);
 
             //count down statuses
             this.crs[actor].statuses.map((s) => {if (s.countsDown) s.counter--});
@@ -300,7 +308,6 @@ export class BattleSession
                 this.crs[actor].addStatus("Vulnerable", 1);
                 this.crs[actor].fatigue -= this.crs[actor].stamina;
             }
-
             if (this.crs[actor].turnInfo.has('offBalance'))
             {
                 let fatSum = 0;
@@ -311,7 +318,6 @@ export class BattleSession
                 if (this.crs[actor].turnInfo.get('offBalance') >= fatSum) this.crs[actor].addStatus("Vulnerable", 1);
             }
 
-            if (!this.crs[actor].turnInfo.has('steadfast')) this.removeBlock(this.crs[actor], this.crs[actor].block);
 
             actor = this.playerOneFirst ? 1 : 0;
             opp = this.playerOneFirst ? 0 : 1;
@@ -369,6 +375,7 @@ export class BattleSession
             dmg = 0;
         }
         target.HP -= dmg;
+        if (skill.name === "Pummel") actor.block += dmg;
 
         //apply statuses from skill
         if (skill) this.applyStatuses(skill, actor, target);

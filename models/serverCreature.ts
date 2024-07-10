@@ -159,5 +159,6 @@ export class ServerCreature
         [ "Fatigued",  new Status("Fatigued", "You're exhausted and need to rest. You can only play 1 card this turn and you became Vulnerable.", 1) ],
         [ "Bolstered", new Status("Bolstered", "You gain more block from cards.", 1, false) ],
         [ "Strengthened", new Status("Strengthened", "You deal more damage with attacks.", 1, false) ],
+        [ "Steadfast", new Status("Steadfast", "You don't lose your block at the end of turn.", 1) ],
     ]);
 }

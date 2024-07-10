@@ -1,1 +1,1 @@
-export const allStatuses = ["Weakened", "Vulnerable", "Pumped", "Bolstered", "Strengthened"];
+export const allStatuses = ["Weakened", "Vulnerable", "Pumped", "Bolstered", "Strengthened", "Steadfast"];

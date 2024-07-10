@@ -139,6 +139,11 @@ export class Skill
             this.addStatusApplyText(effects.get('retaliate'), false);
             this.description += "\n";
         }
+        if (effects.has('fatigue'))
+        {
+            this.description += "Inflict " + effects.get('fatigue') + " fatigue.";
+            breakLine ? this.description += "\n" : this.description += " ";
+        }
         if (effects.has('stance'))
         {
             this.description += "Stance: ";
@@ -150,6 +155,7 @@ export class Skill
         {
             this.description += "Steadfast\n";
         }
+        
     }
 
 }

@@ -112,6 +112,7 @@ function loadAttacks(c: boolean, r: boolean, l: boolean)
     if (c)
     {
         skills.push(allSkills.get("Strike"));
+        skills.push(allSkills.get("Pummel"));
         skills.push(allSkills.get("Heavy Attack"));
         skills.push(allSkills.get("Shred"));
         skills.push(allSkills.get("Twin Strike"));
@@ -138,6 +139,7 @@ function loadBlocks(c: boolean, r: boolean, l: boolean)
 {
     if (c)
     {
+        skills.push(allSkills.get("Exhaust"));
         skills.push(allSkills.get("Block"));
         skills.push(allSkills.get("Blockade"));
         skills.push(allSkills.get("Barricade"));
@@ -195,6 +197,17 @@ const allSkills = new Map<string, Function>
         effects.set('dmg', effects.get('dmg') + x + 8);
     }],
 
+    //+4-6 dmg, gain 1 block for each damage dealt
+    ["Pummel", () =>
+    {
+        name = "Pummel";
+        rarity = 0;
+
+        const x = rndInt(0, 2);
+        fatCost += x * 2 + 3;
+        effects.set('dmg', effects.get('dmg') + x + 4);
+    }],
+
     //+11-15 dmg, +3-7 selfDmg
     ["Wild Out", () =>
     {
@@ -225,10 +238,10 @@ const allSkills = new Map<string, Function>
         name = "Shred";
         rarity = 0;
 
-        const x = rndInt(4, 7);
-        fatCost -= 6 - x;
+        const x = rndInt(0, 3);
+        fatCost +=  x + 2;
         effects.set('dmg', effects.get('dmg') + 4);
-        effects.set('shred', x + 2);
+        effects.set('shred', x + 6);
     }],
 
     //+3 dmg, combo: +6-9 dmg
@@ -305,7 +318,7 @@ const allSkills = new Map<string, Function>
         rarity = 2;
 
         const x = rndInt(0, 5);
-        fatCost += 29 + x;
+        fatCost += 37 + x;
         effects.set('dmg', effects.get('dmg') + 25 + x);
     }],
 
@@ -365,6 +378,19 @@ const allSkills = new Map<string, Function>
         fatCost -= 4 - x;
         effects.set('block', effects.get('block') + x);
         effects.set('retaliate', new Map<string, any>([ ['dmg', x + 2] ]));
+    }],
+
+    //+3-5 block, retaliate: opponent gains 11-14 fatigue
+    ["Exhaust", () =>
+    {
+        name = "Exhaust";
+        rarity = 0;
+
+        const x = rndInt(0, 2);
+        const y = rndInt(0, 3);
+        fatCost -= 2 - x - y;
+        effects.set('block', effects.get('block') + x);
+        effects.set('retaliate', new Map<string, any>([ ['fatigue', y + 11] ]));
     }],
 
     //+3-4 block, steadfast
