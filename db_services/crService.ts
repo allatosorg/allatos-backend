@@ -172,14 +172,6 @@ export class CrService
     });
   }
 
-  async deleteSkillPick(crID: string, index: number)
-  {
-    await updateDoc(doc(db, "creatures", crID),
-    {
-      ['skillPicks.' + index]: deleteField()
-    });
-  }
-
   async replaceSkillPicks(crID: string, skillPicks: Array<any>)
   {
     if (Object.keys(skillPicks).length === 0)

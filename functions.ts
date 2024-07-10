@@ -36,7 +36,7 @@ io.on('connection', (socket: any) =>
         try
         {
             let cr = await crService.getCreatureById(crID);
-            if (uid === cr.ownedBy && cr.skillPicks.length !== 0)
+            if (uid === cr.ownedBy && cr.skillPicks.length !== 0 && !(cr.currentAct))
             {
                 const options = cr.skillPicks.shift();
                 socket.emit('skill-pick-ready', options);
@@ -46,7 +46,7 @@ io.on('connection', (socket: any) =>
                     try
                     {
                         await crService.learnSkill(crID, options[index]);
-                        await crService.deleteSkillPick(crID, 0);
+                        await crService.replaceSkillPicks(crID, cr.skillPicks);
                     }
                     catch(err)
                     {
@@ -60,7 +60,7 @@ io.on('connection', (socket: any) =>
     
                 socket.on('skill-pick-skipped', async () =>
                 {
-                    await crService.deleteSkillPick(crID, 0);
+                    await crService.replaceSkillPicks(crID, cr.skillPicks);
                     socket.disconnect();
                 });
             }
