@@ -112,9 +112,10 @@ function loadAttacks(c: boolean, r: boolean, l: boolean)
     if (c)
     {
         skills.push(allSkills.get("Strike"));
+        skills.push(allSkills.get("Shred"));
         skills.push(allSkills.get("Pummel"));
         skills.push(allSkills.get("Heavy Attack"));
-        skills.push(allSkills.get("Shred"));
+        skills.push(allSkills.get("Puncture"));
         skills.push(allSkills.get("Twin Strike"));
         skills.push(allSkills.get("Debilitate"));
         skills.push(allSkills.get("Reckless Strike"));
@@ -140,22 +141,23 @@ function loadBlocks(c: boolean, r: boolean, l: boolean)
     if (c)
     {
         skills.push(allSkills.get("Exhaust"));
+        skills.push(allSkills.get("Intimidate"));
         skills.push(allSkills.get("Block"));
         skills.push(allSkills.get("Blockade"));
         skills.push(allSkills.get("Barricade"));
         skills.push(allSkills.get("Riposte"));
         skills.push(allSkills.get("Stand Ready"));
         skills.push(allSkills.get("Warm Up"));
+        skills.push(allSkills.get("Channel Rage"));
     }
 
     if (r)
     {
-        
         skills.push(allSkills.get("Throw Off Balance"));
         skills.push(allSkills.get("Take The High Ground"));
         skills.push(allSkills.get("Bolster Defences"));
         skills.push(allSkills.get("Shake It Off"));
-        skills.push(allSkills.get("Channel Rage"));
+        skills.push(allSkills.get("Take It Easy"));
     }
 
     if (l)
@@ -233,15 +235,26 @@ const allSkills = new Map<string, Function>
     }],
 
     //+4 dmg, +6-9 shred
-    ["Shred", () =>
+    ["Puncture", () =>
     {
-        name = "Shred";
+        name = "Puncture";
         rarity = 0;
 
         const x = rndInt(0, 3);
         fatCost +=  x + 2;
         effects.set('dmg', effects.get('dmg') + 4);
         effects.set('shred', x + 6);
+    }],
+
+    //+12-14 shred
+    ["Shred", () =>
+    {
+        name = "Shred";
+        rarity = 0;
+
+        const x = rndInt(0, 2);
+        fatCost +=  2*x + 5;
+        effects.set('shred', x + 12);
     }],
 
     //+3 dmg, combo: +6-9 dmg
@@ -353,7 +366,7 @@ const allSkills = new Map<string, Function>
         rarity = 0;
 
         const x = rndInt(0, 3);
-        fatCost += 12 + x;
+        fatCost += 11 + x;
         effects.set('block', effects.get('block') + x + 10);
     }],
 
@@ -368,6 +381,18 @@ const allSkills = new Map<string, Function>
         effects.set('stance', new Map<string, any>([ ['block', x + 3] ]));
     }],
 
+    //+0-2 block, stance: apply 1 weakened
+    ["Intimidate", () =>
+    {
+        name = "Intimidate";
+        rarity = 0;
+
+        const x = rndInt(0, 2);
+        fatCost -= 2 - x;
+        effects.set('block', effects.get('block') + x);
+        effects.set('stance', new Map<string, any>([ ['Weakened', [1, false]] ]));
+    }],
+
     //+2-4 block, retaliate: 6-8 dmg
     ["Riposte", () =>
     {
@@ -378,6 +403,16 @@ const allSkills = new Map<string, Function>
         fatCost -= 4 - x;
         effects.set('block', effects.get('block') + x);
         effects.set('retaliate', new Map<string, any>([ ['dmg', x + 2] ]));
+    }],
+
+    //apply 2 strengthened to self
+    ["Channel Rage", () =>
+    {
+        name = "Channel Rage";
+        rarity = 0;
+
+        fatCost += 11;
+        effects.set("Bolstered", [2, true]);
     }],
 
     //+3-5 block, retaliate: opponent gains 11-14 fatigue
@@ -393,7 +428,7 @@ const allSkills = new Map<string, Function>
         effects.set('retaliate', new Map<string, any>([ ['fatigue', y + 11] ]));
     }],
 
-    //+3-4 block, steadfast
+    //+4-5 block, steadfast
     ["Stand Ready", () =>
     {
         name = "Stand Ready";
@@ -402,7 +437,7 @@ const allSkills = new Map<string, Function>
         const x = rndInt(1, 2);
         fatCost += x;
         effects.set("Steadfast", [1, true]);
-        effects.set('block', effects.get('block') + x + 2);
+        effects.set('block', effects.get('block') + x + 3);
     }],
 
     //+0-1 block, apply 2 pumped to self
@@ -429,6 +464,18 @@ const allSkills = new Map<string, Function>
         effects.set('offBalanceReq', 18 + x);
     }],
 
+    //+3-4 block, apply 5 controlled breathing to self
+    ["Take It Easy", () =>
+    {
+        name = "Take It Easy";
+        rarity = 1;
+
+        const x = rndInt(1, 2);
+        fatCost += x;
+        effects.set("Controlled Breathing", [5, true]);
+        effects.set('block', effects.get('block') + x + 2);
+    }],
+
     //+3-5 block, your opponent's first attack this turn uses double fatigue
     ["Take The High Ground", () =>
     {
@@ -449,16 +496,6 @@ const allSkills = new Map<string, Function>
         const x = rndInt(1, 2);
         fatCost += 6 + x;
         effects.set('block', effects.get('block') + x);
-        effects.set("Bolstered", [2, true]);
-    }],
-
-    //apply 2 strengthened to self
-    ["Channel Rage", () =>
-    {
-        name = "Channel Rage";
-        rarity = 1;
-
-        fatCost += 11;
         effects.set("Bolstered", [2, true]);
     }],
     
@@ -510,7 +547,7 @@ function initCardBase(type: string)
 
 
         case 'block':
-            effects.set('block', 2);
+            effects.set('block', 3);
             fatCost = 3;
             selfTarget = true;
 

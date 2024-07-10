@@ -160,5 +160,6 @@ export class ServerCreature
         [ "Bolstered", new Status("Bolstered", "You gain more block from cards.", 1, false) ],
         [ "Strengthened", new Status("Strengthened", "You deal more damage with attacks.", 1, false) ],
         [ "Steadfast", new Status("Steadfast", "You don't lose your block at the end of turn.", 1) ],
+        [ "Controlled Breathing", new Status("Controlled Breathing", "Recover stamina at the end of each turn.", 1) ],
     ]);
 }

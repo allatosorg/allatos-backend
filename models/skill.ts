@@ -75,6 +75,10 @@ export class Skill
                 this.description += "Count down your status effects by 1.";
                 break;
 
+            case "Pummel":
+                this.description += "Gain 1 block for each damage dealt.";
+                break;
+
             default:
                 break;
         }

@@ -294,6 +294,7 @@ export class BattleSession
                     this.crs[opp].fatigue += this.crs[actor].turnInfo.get('retaliate').get('fatigue');
                 }
             }
+            if (this.crs[actor].hasStatus("Controlled Breathing")) this.removeFatigue(this.crs[actor], this.crs[actor].getStatus("Controlled Breathing").counter);
             this.io.to(this.roomID).emit('action-happened', {type: ''});
             this.sendSnapshot();
 
@@ -326,6 +327,12 @@ export class BattleSession
         }
 
         this.resetTurnInfo();
+    }
+
+    removeFatigue(target: ServerCreature, amount: number)
+    {
+        if (target.fatigue < amount) amount = target.fatigue;
+        target.fatigue -= amount;
     }
 
     addBlock(actor: ServerCreature, amount: number, skill?: Skill)
