@@ -46,7 +46,7 @@ io.on('connection', (socket: any) =>
                     try
                     {
                         await crService.learnSkill(crID, options[index]);
-                        await crService.replaceSkillPicks(crID, cr.skillPicks);
+                        await crService.deleteSkillPick(crID, index);
                     }
                     catch(err)
                     {
