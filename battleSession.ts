@@ -127,6 +127,8 @@ export class BattleSession
         catch(err)
         {
             console.error(err);
+            this.sockets[0].emit('crash');
+            this.sockets[1].emit('crash');
             this.gameOverCb();
         }
     }
