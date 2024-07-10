@@ -35,11 +35,13 @@ export class Skill
             case 'attack':
                 this.addBasicEffects(this.effects);
                 this.addStatusApplyText(this.effects);
+                this.addCombo();
                 break;
 
             case 'block':
                 this.addBasicEffects(this.effects);
                 this.addStatusApplyText(this.effects);
+                this.addStance();
                 break;
 
             default:
@@ -119,13 +121,6 @@ export class Skill
             this.description += "Deal " + effects.get('selfDmg') + " damage to self.";
             breakLine ? this.description += "\n" : this.description += " ";
         }
-        if (effects.has('combo'))
-        {
-            this.description += "Combo: ";
-            this.addBasicEffects(effects.get('combo'), false);
-            this.addStatusApplyText(effects.get('combo'), false);
-            this.description += "\n";
-        }
 
         if (effects.has('block'))
         {
@@ -144,13 +139,6 @@ export class Skill
             this.description += "Inflict " + effects.get('fatigue') + " fatigue.";
             breakLine ? this.description += "\n" : this.description += " ";
         }
-        if (effects.has('stance'))
-        {
-            this.description += "Stance: ";
-            this.addBasicEffects(effects.get('stance'), false);
-            this.addStatusApplyText(effects.get('stance'), false);
-            this.description += "\n";
-        }
         if (effects.has('steadfast'))
         {
             this.description += "Steadfast\n";
@@ -158,4 +146,25 @@ export class Skill
         
     }
 
+    addCombo()
+    {
+        if (this.effects.has('combo'))
+        {
+            this.description += "Combo: ";
+            this.addBasicEffects(this.effects.get('combo'), false);
+            this.addStatusApplyText(this.effects.get('combo'), false);
+            this.description += "\n";
+        }
+    }
+
+    addStance()
+    {
+        if (this.effects.has('stance'))
+        {
+            this.description += "Stance: ";
+            this.addBasicEffects(this.effects.get('stance'), false);
+            this.addStatusApplyText(this.effects.get('stance'), false);
+            this.description += "\n";
+        }
+    }
 }
