@@ -126,15 +126,12 @@ export class ServerCreature
 
     addXP(gained: number)
     {
-        if (this.xp + gained < calcXpRequirement(this.level))
+        this.xp += gained;
+        if (this.xp > calcXpRequirement(this.level))
         {
-            this.xp += gained;
-        }
-        else
-        {
+            this.xp -= calcXpRequirement(this.level);
             this.level++;
             this.lvlup++;
-            this.xp -= calcXpRequirement(this.level);
 
             let newSkillPick = [];
             for (let i = 0; i < 3; i++) newSkillPick.push(generateSkill(true, true, false));
