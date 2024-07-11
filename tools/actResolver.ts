@@ -86,19 +86,21 @@ const actEventTable =
 {
     'Climb the Mountains':
     [
-        ['Become stronger', 0.23]
+        ['Become stronger', 0.15]
     ],
     'Explore the Jungle':
     [
-        ['Hidden treasure', 0.3]
+        ['Hidden treasure', 0.25],
+        ['Ambushed in the jungle', 0.05]
     ],
     'Visit the Magical Pond':
     [
-        ['Blessed by spirit', 0.14]
+        ['Blessed by spirit', 0.10]
     ],
     'Investigate the Ancient Ruins':
     [
-        
+        ['Legendary reasure', 0.06],
+        ['Cursed', 0.03],
     ]
 }
 
@@ -159,6 +161,37 @@ let eventsMap = new Map<string, Function>
                 cr.addSkillPick(skills);
     
                 notiDescription += "You found a hidden stash of supplies. You can learn a common skill. ";
+            }
+        }
+    ],
+
+    ['Ambushed in the jungle', (act: Activity, cr: ServerCreature) =>
+        {
+            const lostSkills = cr.skills.splice(rndInt(0, cr.skills.length-1), 1);
+
+            notiDescription += "It's not certain whether due to carelessness or just plain bad luck, but " +cr.name+ " got ambushed by a horrible monster while exploring. "+
+            " They didn't get away unscathed, and lost a skill: " +lostSkills[0].name+ ".";
+        }
+    ],
+
+    ['Legendary treasure', (act: Activity, cr: ServerCreature) =>
+        {
+            let skills = [];
+            for (let i = 0; i < 3; i++) skills.push(generateSkill(false, false, true));
+            cr.addSkillPick(skills);
+
+            notiDescription += "During your expedition you stumbled upon a legendary artifact, formerly belonging to someone far more powerful than " +cr.name+
+            ". You can learn a legendary skill! ";
+        }
+    ],
+
+    ['Cursed', async (act: Activity, cr: ServerCreature) =>
+        {
+            if (!cr.getTraitNames().includes("Cursed"))
+            {
+                cr.addTrait(await genericService.getTrait("Cursed"));
+
+                notiDescription += "Exploring the ruins was not without peril, and an ancient curse fell on "+cr.name+". You're not sure how to lift it, if a cure even exists.";
             }
         }
     ],

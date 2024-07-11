@@ -1,4 +1,4 @@
-import { allStatuses } from "./skillEffects";
+import { allStatuses } from "../db_services/shared/statuses";
 
 export class Skill
 {
@@ -87,7 +87,7 @@ export class Skill
     //dont break line for sub-effects (combo, stance etc)
     addStatusApplyText(effects: Map<string, any>, breakLine = true)
     {
-        allStatuses.forEach((st) =>
+        for (let st of allStatuses.keys())
         {
             if (effects.has(st))
             {
@@ -99,7 +99,7 @@ export class Skill
                 else this.description += ".";
                 breakLine ? this.description += "\n" : this.description += " ";
             }
-        });
+        }
     }
 
     //dont break line for sub-effects (combo, stance etc)

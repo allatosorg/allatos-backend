@@ -1,6 +1,6 @@
 import { ServerCreature } from "./models/serverCreature";
 import { Skill } from "./models/skill";
-import { allStatuses } from "./models/skillEffects";
+import { allStatuses } from "./db_services/shared/statuses";
 
 export class BattleSession
 {
@@ -658,7 +658,7 @@ export class BattleSession
     {
         for (let key of skill.effects.keys())
         {
-            if (allStatuses.includes(key))
+            if (allStatuses.has(key))
             {
                 skill.effects.get(key)[1] ? actor.addStatus(key, skill.effects.get(key)[0]) : opp.addStatus(key, skill.effects.get(key)[0]);
             }
