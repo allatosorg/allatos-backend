@@ -86,7 +86,7 @@ const actEventTable =
 {
     'Climb the Mountains':
     [
-        ['Become stronger', 0.15]
+        ['Become stronger', 0.15],
     ],
     'Explore the Jungle':
     [
@@ -99,7 +99,7 @@ const actEventTable =
     ],
     'Investigate the Ancient Ruins':
     [
-        ['Legendary reasure', 0.06],
+        ['Legendary treasure', 0.06],
         ['Cursed', 0.03],
     ]
 }
