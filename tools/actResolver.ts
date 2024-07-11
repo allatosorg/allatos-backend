@@ -87,6 +87,7 @@ const actEventTable =
     'Climb the Mountains':
     [
         ['Become stronger', 0.15],
+        ['Improved lungs', 0.5],
     ],
     'Explore the Jungle':
     [
@@ -192,6 +193,18 @@ let eventsMap = new Map<string, Function>
                 cr.addTrait(await genericService.getTrait("Cursed"));
 
                 notiDescription += "Exploring the ruins was not without peril, and an ancient curse fell on "+cr.name+". You're not sure how to lift it, if a cure even exists.";
+            }
+        }
+    ],
+
+    ['Improved lungs', async (act: Activity, cr: ServerCreature) =>
+        {
+            if (!cr.getTraitNames().includes("Iron Lungs"))
+            {
+                cr.addTrait(await genericService.getTrait("Iron Lungs"));
+
+                notiDescription += "The fresh air is of excellent quality up there, in the mountains, and that makes " +cr.name+" feel especially healthy after their recent trip. "+
+                "Or could it just be the strenuous exercise the peaks require? Gained a new trait: Iron Lungs.";
             }
         }
     ],

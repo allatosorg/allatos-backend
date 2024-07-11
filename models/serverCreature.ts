@@ -4,6 +4,7 @@ import { Trait } from "./trait";
 import { generateSkill } from "../tools/skillGenerator";
 import { Status } from "./status";
 import { allStatuses } from "../db_services/shared/statuses";
+import { calcXpRequirement } from "../tools/formulas";
 
 export class ServerCreature
 {
@@ -80,6 +81,17 @@ export class ServerCreature
   
         return has;
     }
+
+    hasTrait(traitName: string): boolean
+    {
+        let has = false;
+        this.traits!.forEach((s) =>
+        {
+          if (s.name === traitName) has = true;
+        });
+  
+        return has;
+    }
     
     getStatus(statusName: string): Status | null
     {
@@ -114,7 +126,7 @@ export class ServerCreature
 
     addXP(gained: number)
     {
-        if (this.xp + gained < 100)
+        if (this.xp + gained < calcXpRequirement(this.level))
         {
             this.xp += gained;
         }
@@ -122,7 +134,7 @@ export class ServerCreature
         {
             this.level++;
             this.lvlup++;
-            this.xp = 0 + (this.xp + gained - 100);
+            this.xp -= calcXpRequirement(this.level);
 
             let newSkillPick = [];
             for (let i = 0; i < 3; i++) newSkillPick.push(generateSkill(true, true, false));

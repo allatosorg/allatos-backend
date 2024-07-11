@@ -295,6 +295,9 @@ export class BattleSession
                 }
             }
             if (this.crs[actor].hasStatus("Controlled Breathing")) this.removeFatigue(this.crs[actor], this.crs[actor].getStatus("Controlled Breathing").counter);
+            if (this.crs[actor].hasTrait("Iron Lungs")) this.removeFatigue(this.crs[actor], 2);
+
+
             this.io.to(this.roomID).emit('action-happened', {type: ''});
             this.sendSnapshot();
 
