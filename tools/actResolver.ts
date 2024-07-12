@@ -37,7 +37,7 @@ export async function resolveAct(cr: ServerCreature, act: Activity): Promise<Not
     {
         const rolledXP = rollXP(cr.int, act.props['xp']);
         cr.addXP(rolledXP);
-        notiDescription += "Gained " + rolledXP + " xp.\n";
+        notiDescription += "Gained " + rolledXP + " xp.";
     }
 
     return new Notification(cr.name + " back from " + act.name, notiDescription, 'activity-summary', new Date());
@@ -86,22 +86,24 @@ const actEventTable =
 {
     'Climb the Mountains':
     [
-        ['Become stronger', 0.15],
-        ['Improved lungs', 0.5],
+        ['Become stronger', 0.12],
+        ['Improved lungs', 0.4],
     ],
     'Explore the Jungle':
     [
-        ['Hidden treasure', 0.25],
+        ['Hidden treasure', 0.23],
         ['Ambushed in the jungle', 0.05]
     ],
     'Visit the Magical Pond':
     [
-        ['Blessed by spirit', 0.10]
+        ['Blessed by spirit', 0.09],
+        ['Magic gem', 0.05]
     ],
     'Investigate the Ancient Ruins':
     [
         ['Legendary treasure', 0.06],
         ['Cursed', 0.03],
+        ['Ancient knowledge', 0.17],
     ]
 }
 
@@ -113,7 +115,16 @@ let eventsMap = new Map<string, Function>
             const randomSkill = generateSkill(false, false, true);
             cr.addSkillPick([randomSkill]);
 
-            notiDescription += "You have been blessed by a magical spirit! You can learn a legendary skill: " + randomSkill.name + ". ";
+            notiDescription += "You have been blessed by a magical spirit! You can learn a legendary skill: "+ randomSkill.name +". ";
+        }
+    ],
+
+    ['Magic gem', (act: Activity, cr: ServerCreature) =>
+        {
+            cr.lvlup++;
+
+            notiDescription += cr.name +" stumbled upon a strange, luminescent gemstone in the water. It feels strange to the touch... or felt, because it shattered almost instantly"+
+            " after picking it up. Gained a skill point.\n";
         }
     ],
 
@@ -128,20 +139,20 @@ let eventsMap = new Map<string, Function>
                 cr.removeTrait('Muscular');
                 cr.addTrait(await genericService.getTrait('Absolutely Jacked'));
 
-                notiDescription += "Regular exercise has shaped " + cr.name + "'s physique into an exceptional form. Gained a new trait: Absolutely Jacked. " ;
+                notiDescription += "Regular exercise has shaped " + cr.name + "'s physique into an exceptional form. Gained a new trait: Absolutely Jacked.\n" ;
             }
             else if (cr.getTraitNames().includes('Strong'))
             {
                 cr.removeTrait('Strong');
                 cr.addTrait(await genericService.getTrait('Muscular'));
 
-                notiDescription += cr.name + " seems to get stronger with each trip. Gained a new trait: Muscular. " ;
+                notiDescription += cr.name + " seems to get stronger with each trip. Gained a new trait: Muscular.\n" ;
             }
             else
             {
                 cr.addTrait(await genericService.getTrait('Strong'));
 
-                notiDescription += "Mountain climbing turned out to be a decent workout. Gained a new trait: Strong. " ;
+                notiDescription += "Mountain climbing turned out to be a decent workout. Gained a new trait: Strong.\n" ;
             }
         }
     ],
@@ -153,7 +164,7 @@ let eventsMap = new Map<string, Function>
                 const extraXP = rollXP(cr.int, 15);
                 cr.addXP(extraXP);
 
-                notiDescription += "You found a hidden stash of supplies. Gained " + extraXP + " extra XP. ";
+                notiDescription += "You found a hidden stash of supplies. Gained " + extraXP + " extra XP.\n";
             }
             else
             {
@@ -161,7 +172,7 @@ let eventsMap = new Map<string, Function>
                 for (let i = 0; i < 3; i++) skills.push(generateSkill(true, false, false));
                 cr.addSkillPick(skills);
     
-                notiDescription += "You found a hidden stash of supplies. You can learn a common skill. ";
+                notiDescription += "You found a hidden stash of supplies. You can learn a common skill.\n";
             }
         }
     ],
@@ -171,7 +182,7 @@ let eventsMap = new Map<string, Function>
             const lostSkills = cr.skills.splice(rndInt(0, cr.skills.length-1), 1);
 
             notiDescription += "It's not certain whether due to carelessness or just plain bad luck, but " +cr.name+ " got ambushed by a horrible monster while exploring. "+
-            " They didn't get away unscathed, and lost a skill: " +lostSkills[0].name+ ".";
+            "They didn't get away unscathed, and lost a skill: "+lostSkills[0].name+".\n";
         }
     ],
 
@@ -182,7 +193,7 @@ let eventsMap = new Map<string, Function>
             cr.addSkillPick(skills);
 
             notiDescription += "During your expedition you stumbled upon a legendary artifact, formerly belonging to someone far more powerful than " +cr.name+
-            ". You can learn a legendary skill! ";
+            ". You can learn a legendary skill!\n";
         }
     ],
 
@@ -192,8 +203,16 @@ let eventsMap = new Map<string, Function>
             {
                 cr.addTrait(await genericService.getTrait("Cursed"));
 
-                notiDescription += "Exploring the ruins was not without peril, and an ancient curse fell on "+cr.name+". You're not sure how to lift it, if a cure even exists.";
+                notiDescription += "Exploring the ruins was not without peril, and an ancient curse fell on "+cr.name+". You're not sure how to lift it, if a cure even exists.\n";
             }
+        }
+    ],
+
+    ['Ancient knowledge', async (act: Activity, cr: ServerCreature) =>
+        {
+            const randomSkill = generateSkill(false, true, false);
+            cr.addSkillPick([randomSkill]);
+            notiDescription += "There's useful knowledge to be found in these ancient buildings and sacred sites. You can learn a rare skill: "+randomSkill.name+".\n";
         }
     ],
 
@@ -203,8 +222,8 @@ let eventsMap = new Map<string, Function>
             {
                 cr.addTrait(await genericService.getTrait("Iron Lungs"));
 
-                notiDescription += "The fresh air is of excellent quality up there, in the mountains, and that makes " +cr.name+" feel especially healthy after their recent trip. "+
-                "Or could it just be the strenuous exercise the peaks require? Gained a new trait: Iron Lungs.";
+                notiDescription += "The fresh air is of excellent quality up there, in the mountains, and that makes "+cr.name+" feel especially healthy after their recent trip. "+
+                "Or could it just be the strenuous exercise the peaks require? Gained a new trait: Iron Lungs.\n";
             }
         }
     ],

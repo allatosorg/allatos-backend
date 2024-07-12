@@ -12,7 +12,7 @@ export function generateCreature(): ServerCreature
 
     const startingSkills = generateStartingSkills();
 
-    return new ServerCreature('', names[rndInt(0, names.length - 1)], 'test', randomStr, randomAgi, randomInt, randomCon, randomIni, '', startingSkills, [], randomStam, 0, new Date(), 1, [], 0, 0);
+    return new ServerCreature('', names[rndInt(0, names.length - 1)], types[rndInt(0, types.length - 1)], randomStr, randomAgi, randomInt, randomCon, randomIni, '', startingSkills, [], randomStam, 0, new Date(), 1, [], 0, 0);
 }
 
 const names =
@@ -33,7 +33,7 @@ const names =
     "Behemoth",
     "Lumina",
     "Voltaic",
-    "Gaiaform",
+    "Gaia",
     "Zephyra",
     "Astraea",
     "Cryos",
@@ -45,6 +45,12 @@ const names =
     "Sylphina",
     "Chimera EX",
     "Leviathan Prime"
+];
+
+const types =
+[
+    "Mutchkuh",
+    "Tortel"
 ];
 
 function rndInt(min: number, max: number): number
