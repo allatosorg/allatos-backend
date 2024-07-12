@@ -29,11 +29,14 @@ const server = createServer(
 
 io.on('connection', (socket: any) =>
 {
-  socket.on('queue-up', (uid: string, crID: string, successCb: Function) =>
+  socket.on('queue-up', async (uid: string, crID: string, successCb: Function) =>
   {
+    const cr = await crService.getCreatureById(crID);
+    if (cr.ownedBy !== uid) socket.disconnect();
+
     socket.data.uid = uid;
     socket.data.crID = crID;
-    if (!waiting.includes(socket))
+    if (!waiting.includes(socket) && !(cr.currentAct))
     {
       waiting.push(socket);
       successCb();
