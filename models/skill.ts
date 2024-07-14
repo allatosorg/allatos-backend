@@ -172,8 +172,21 @@ export class Skill
         }
     }
 
-    addNumberedEffect(effect: string, n: number)
+    addEffect(effect: string, n: number, mapName?: string)
     {
+        if (mapName)
+        {
+            if (this.effects.has(mapName))
+            {
+                if (this.effects.get(mapName).has(effect))
+                {
+                    this.effects.get(mapName).set(effect, n + this.effects.get(mapName).get(effect));
+                }
+                else this.effects.get(mapName).set(effect, n);
+            }
+            else this.effects.set(mapName, new Map<string, any>([ [effect, n] ]))
+        }
+
         if (this.effects.has(effect))
         {
             this.effects.set(effect, n + this.effects.get(effect));

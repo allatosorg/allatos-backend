@@ -618,7 +618,7 @@ export class BattleSession
             
                 
             case 'block':
-                if (this.crs[actor].hasTrait("Hardy")) skill.addNumberedEffect('stance', 3);
+                if (this.crs[actor].hasTrait("Hardy")) skill.addStance('block', 3);
 
                 if (skill.effects.has('stance') && this.crs[actor].turnInfo.has('lastSkill'))
                 {
