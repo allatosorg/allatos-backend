@@ -195,8 +195,8 @@ export class BattleSession
         //activate blocks
         let p1turn = this.playerOneFirst;
 
-        const p1Blocks = this.skillsPicked[0].filter((s) => { s.type === 'block' });
-        const p2Blocks = this.skillsPicked[1].filter((s) => { s.type === 'block' });
+        const p1Blocks = this.skillsPicked[0].filter((s) => s.type === 'block');
+        const p2Blocks = this.skillsPicked[1].filter((s) => s.type === 'block');
 
         while (0 < p1Blocks.length + p2Blocks.length)
         {
@@ -216,8 +216,8 @@ export class BattleSession
         //construct attack skill order and activate them
         p1turn = this.playerOneFirst;
 
-        const p1Attacks = this.skillsPicked[0].filter((s) => { s.type === 'attack' });
-        const p2Attacks = this.skillsPicked[1].filter((s) => { s.type === 'attack' });
+        const p1Attacks = this.skillsPicked[0].filter((s) => s.type === 'attack');
+        const p2Attacks = this.skillsPicked[1].filter((s) => s.type === 'attack');
 
         while (0 < p1Attacks.length + p2Attacks.length)
         {
@@ -519,7 +519,6 @@ export class BattleSession
     {
         //make a clone thats modifiable (and put ogSkill into grave)
         let skill = Object.assign(Object.create(Object.getPrototypeOf(ogSkill)), ogSkill);
-        console.log(skill);
         this.io.to(this.roomID).emit('action-happened', skill);
         this.sendSnapshot();
 
