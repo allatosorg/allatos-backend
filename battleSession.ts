@@ -1,6 +1,7 @@
 import { ServerCreature } from "./models/serverCreature";
 import { Skill } from "./models/skill";
 import { allStatuses } from "./db_services/shared/statuses";
+import { Socket } from "socket.io";
 
 export class BattleSession
 {
@@ -8,7 +9,7 @@ export class BattleSession
     crs: Array<ServerCreature> = [];
     uids: Array<String> = [];
     io: any;
-    sockets: Array<any> = [];
+    sockets: Array<Socket> = [];
     gameOverCb: Function;
 
     //gameStates -> 0: initializing || 10: turn start || 20: 1-1 skills picked (reveal phase) || 30: 2-2 skills picked (action phase) || 40: turn ending
@@ -529,7 +530,7 @@ export class BattleSession
     useSkill(actor: number, opponent: number, ogSkill: Skill)
     {
         //make a clone thats modifiable (and put ogSkill into grave)
-        let skill = structuredClone(ogSkill);
+        let skill: Skill = Object.assign({}, ogSkill);
         this.io.to(this.roomID).emit('action-happened', skill);
         this.sendSnapshot();
 
