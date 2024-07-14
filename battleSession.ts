@@ -519,6 +519,7 @@ export class BattleSession
     {
         //make a clone thats modifiable (and put ogSkill into grave)
         let skill = Object.assign(Object.create(Object.getPrototypeOf(ogSkill)), ogSkill);
+        console.log(skill);
         this.io.to(this.roomID).emit('action-happened', skill);
         this.sendSnapshot();
 
