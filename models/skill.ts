@@ -35,13 +35,13 @@ export class Skill
             case 'attack':
                 this.addBasicEffects(this.effects);
                 this.addStatusApplyText(this.effects);
-                this.addCombo();
+                this.addComboText();
                 break;
 
             case 'block':
                 this.addBasicEffects(this.effects);
                 this.addStatusApplyText(this.effects);
-                this.addStance();
+                this.addStanceText();
                 break;
 
             default:
@@ -150,7 +150,7 @@ export class Skill
         
     }
 
-    addCombo()
+    addComboText()
     {
         if (this.effects.has('combo'))
         {
@@ -161,7 +161,7 @@ export class Skill
         }
     }
 
-    addStance()
+    addStanceText()
     {
         if (this.effects.has('stance'))
         {
@@ -170,5 +170,14 @@ export class Skill
             this.addStatusApplyText(this.effects.get('stance'), false);
             this.description += "\n";
         }
+    }
+
+    addNumberedEffect(effect: string, n: number)
+    {
+        if (this.effects.has(effect))
+        {
+            this.effects.set(effect, n + this.effects.get(effect));
+        }
+        else this.effects.set(effect, n);
     }
 }

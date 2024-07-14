@@ -192,30 +192,39 @@ export class BattleSession
         this.skillsOrdered = [];
 
         //activate blocks
-        for (let i = 0; i < this.skillsPicked[0].length; i++)
+        let p1turn = this.playerOneFirst;
+        let haveBlocks = true;
+        while (haveBlocks)
         {
-            if (this.skillsPicked[0][i].type === 'block')
+            haveBlocks = false;
+            if (p1turn)
             {
-                this.useSkill(0, 1, this.skillsPicked[0][i]);
-
-                this.skillsPicked[0].splice(i, 1);
-                i--;
+                for (let s of this.skillsPicked[0])
+                {
+                    if (s.type === 'block')
+                    {
+                        this.skillsOrdered.push(this.skillsPicked[0].splice(this.skillsPicked[0].indexOf(s), 1)[0]);
+                        haveBlocks = true;
+                    }
+                }
             }
-        }
-
-        for (let i = 0; i < this.skillsPicked[1].length; i++)
-        {
-            if (this.skillsPicked[1][i].type === 'block')
+            else
             {
-                this.useSkill(1, 0, this.skillsPicked[1][i]);
-                this.skillsPicked[1].splice(i, 1);
-                i--;
+                for (let s of this.skillsPicked[1])
+                {
+                    if (s.type === 'block')
+                    {
+                        this.skillsOrdered.push(this.skillsPicked[1].splice(this.skillsPicked[1].indexOf(s), 1)[0]);
+                        haveBlocks = true;
+                    }
+                }
             }
+            p1turn = !p1turn;
         }
 
         this.gameState = 35;
         //construct attack skill order and activate them
-        let p1turn = this.playerOneFirst;
+        p1turn = this.playerOneFirst;
         while (0 < this.skillsPicked[0].length + this.skillsPicked[1].length)
         {
             if (p1turn)
@@ -224,7 +233,6 @@ export class BattleSession
                 {
                     this.skillsOrdered.push(this.skillsPicked[0].shift());
                 }
-                else this.skillsOrdered.push(this.skillsPicked[1].shift());
             }
             else
             {
@@ -232,8 +240,6 @@ export class BattleSession
                 {
                     this.skillsOrdered.push(this.skillsPicked[1].shift());
                 }
-                else this.skillsOrdered.push(this.skillsPicked[0].shift());
-
             }
             p1turn = !p1turn;
         }
@@ -304,14 +310,13 @@ export class BattleSession
             if (!this.crs[actor].hasStatus("Steadfast")) this.removeBlock(this.crs[actor], this.crs[actor].block);
 
             //count down statuses
-            this.crs[actor].statuses.map((s) => {if (s.countsDown) s.counter--});
-            this.crs[actor].statuses = this.crs[actor].statuses.filter((s) => !s.countsDown || s.counter > 0);
+            this.crs[actor].countStatusesDown();
 
             //apply end of turn status gains
             if (this.crs[actor].fatigue >= this.crs[actor].stamina)
             {
                 this.crs[actor].addStatus("Fatigued", 1);
-                this.crs[actor].addStatus("Vulnerable", 1);
+                if (!this.crs[actor].hasTrait("Hardy")) this.crs[actor].addStatus("Vulnerable", 1);
                 this.crs[actor].fatigue -= this.crs[actor].stamina;
             }
             if (this.crs[actor].turnInfo.has('offBalance'))
@@ -561,6 +566,18 @@ export class BattleSession
         switch(skill.type)
         {
             case 'attack':
+                if (this.crs[actor].hasTrait("Bad Tempered") && !this.crs[actor].turnInfo.has('attacked'))
+                {
+                    if (this.crs[actor].hasStatus("First"))
+                    {
+                        if (skill.fatCost < 4)
+                        {
+                            skill.fatCost = 0;
+                        }
+                        else skill.fatCost -= 4;
+                    }
+                    else skill.addNumberedEffect('dmg', 2);
+                }
                 this.crs[actor].turnInfo.set('attacked', true);
 
                 if (this.crs[actor].turnInfo.get('highGroundDebuff'))
@@ -600,6 +617,8 @@ export class BattleSession
             
                 
             case 'block':
+                if (this.crs[actor].hasTrait("Hardy")) skill.addNumberedEffect('stance', 3);
+
                 if (skill.effects.has('stance') && this.crs[actor].turnInfo.has('lastSkill'))
                 {
                     for (let [effect, value] of skill.effects.get('stance'))
@@ -637,8 +656,7 @@ export class BattleSession
         switch(skill.name)
         {
             case "Shake It Off":
-                this.crs[actor].statuses.map((s) => {if (s.countsDown) s.counter--});
-                this.crs[actor].statuses = this.crs[actor].statuses.filter((s) => !s.countsDown || s.counter > 0);
+                this.crs[actor].countStatusesDown();
                 break;
 
             default:

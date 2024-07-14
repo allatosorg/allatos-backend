@@ -5,6 +5,7 @@ import { generateSkill } from "../tools/skillGenerator";
 import { Status } from "./status";
 import { allStatuses } from "../db_services/shared/statuses";
 import { calcXpRequirement } from "../tools/formulas";
+import { traitFuncs } from "../db_services/shared/traits";
 
 export class ServerCreature
 {
@@ -27,7 +28,9 @@ export class ServerCreature
     lvlup: number;
     battlesWon: number;
     currentAct?: Activity;
-
+    needsCopy = true;
+    baseSelf: ServerCreature | undefined;
+    
     //for battle
     HP?: number;
     block?: number;
@@ -61,6 +64,13 @@ export class ServerCreature
         this.level = level;
         this.lvlup = lvlup;
         this.battlesWon = battlesWon;
+
+        if (this.needsCopy)
+        {
+            this.needsCopy = false;
+            this.baseSelf = Object.assign({}, this);;
+            this.applyTraits();
+        }
     }
 
     getTraitNames(): Array<string>
@@ -158,5 +168,25 @@ export class ServerCreature
         if (!this.traits) return;
 
         this.traits = this.traits.filter((t) => t.name !== traitName);
+    }
+
+    applyTraits()
+    {
+        if (this.traits)
+        {
+            for (let t of this.traits)
+            {
+                if (!t.isScaling) traitFuncs.get(t.name)!(this);
+            }
+        }
+    }
+    
+    countStatusesDown()
+    {
+        this.statuses.map((s) =>
+        {
+            if (s.countsDown && s.name !== "First") s.counter--;
+        });
+        this.statuses = this.statuses.filter((s) => !s.countsDown || s.counter > 0);
     }
 }

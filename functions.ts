@@ -1,9 +1,5 @@
-import { Creature } from "./models/creature";
-import { Skill } from "./models/skill";
 import { CrService } from "./db_services/crService";
-import { generateSkill } from "./tools/skillGenerator";
 import { UserService } from "./db_services/userService";
-import { User } from "./models/user";
 import { generateCreature } from "./tools/creatureGenerator";
 import * as express from "express";
 import { createServer } from "https";
@@ -118,7 +114,7 @@ io.on('connection', (socket: any) =>
             let user = await userService.getUser(uid);
             if (user.ownedCreatures.length === 0)
             {
-                let newCr = generateCreature();
+                let newCr = await generateCreature();
                 newCr.ownedBy = uid;
                 const result = await crService.addCreature(newCr, uid);
                 if (!result)
