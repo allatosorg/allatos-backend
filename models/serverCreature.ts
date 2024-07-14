@@ -176,7 +176,7 @@ export class ServerCreature
         {
             for (let t of this.traits)
             {
-                if (!t.isScaling) traitFuncs.get(t.name)!(this);
+                if (!t.isScaling && traitFuncs.has(t.name)) traitFuncs.get(t.name)!(this);
             }
         }
     }
