@@ -84,10 +84,13 @@ export class ServerCreature
     hasStatus(statusName: string): boolean
     {
         let has = false;
-        this.statuses!.forEach((s) =>
+        if (this.statuses)
         {
-          if (s.name === statusName) has = true;
-        });
+            this.statuses.forEach((s) =>
+            {
+                if (s.name === statusName) has = true;
+            });
+        }
   
         return has;
     }
@@ -95,10 +98,13 @@ export class ServerCreature
     hasTrait(traitName: string): boolean
     {
         let has = false;
-        this.traits!.forEach((s) =>
+        if (this.traits)
         {
-          if (s.name === traitName) has = true;
-        });
+            this.traits.forEach((s) =>
+            {
+                if (s.name === traitName) has = true;
+            });
+        }
   
         return has;
     }
