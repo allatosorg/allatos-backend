@@ -99,7 +99,7 @@ export class CrService
       skills: cr.skills.map((s) => { return this.skillToObj(s) }),
       stamina: cr.stamina,
       str: cr.str,
-      traits: [],
+      traits: cr.traits,
       xp: cr.xp,
       lvlup: cr.lvlup,
       battlesWon: 0,
