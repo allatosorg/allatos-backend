@@ -186,11 +186,13 @@ export class Skill
             }
             else this.effects.set(mapName, new Map<string, any>([ [effect, n] ]))
         }
-
-        if (this.effects.has(effect))
+        else
         {
-            this.effects.set(effect, n + this.effects.get(effect));
+            if (this.effects.has(effect))
+            {
+                this.effects.set(effect, n + this.effects.get(effect));
+            }
+            else this.effects.set(effect, n);
         }
-        else this.effects.set(effect, n);
     }
 }

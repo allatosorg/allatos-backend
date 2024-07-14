@@ -194,31 +194,20 @@ export class BattleSession
 
         //activate blocks
         let p1turn = this.playerOneFirst;
-        let haveBlocks = true;
-        while (haveBlocks)
+
+        const p1Blocks = this.skillsPicked[0].filter((s) => { s.type === 'block' });
+        const p2Blocks = this.skillsPicked[1].filter((s) => { s.type === 'block' });
+
+        while (0 < p1Blocks.length + p2Blocks.length)
         {
-            haveBlocks = false;
-            if (p1turn)
+            if (p1turn && p1Blocks.length > 0)
             {
-                for (let s of this.skillsPicked[0])
-                {
-                    if (s.type === 'block')
-                    {
-                        this.skillsOrdered.push(this.skillsPicked[0].splice(this.skillsPicked[0].indexOf(s), 1)[0]);
-                        haveBlocks = true;
-                    }
-                }
+                this.skillsOrdered.push(p1Blocks.shift());
             }
-            else
+            else if (p2Blocks.length > 0)
             {
-                for (let s of this.skillsPicked[1])
-                {
-                    if (s.type === 'block')
-                    {
-                        this.skillsOrdered.push(this.skillsPicked[1].splice(this.skillsPicked[1].indexOf(s), 1)[0]);
-                        haveBlocks = true;
-                    }
-                }
+                this.skillsOrdered.push(p2Blocks.shift());
+
             }
             p1turn = !p1turn;
         }
@@ -226,21 +215,20 @@ export class BattleSession
         this.gameState = 35;
         //construct attack skill order and activate them
         p1turn = this.playerOneFirst;
-        while (0 < this.skillsPicked[0].length + this.skillsPicked[1].length)
+
+        const p1Attacks = this.skillsPicked[0].filter((s) => { s.type === 'attack' });
+        const p2Attacks = this.skillsPicked[1].filter((s) => { s.type === 'attack' });
+
+        while (0 < p1Attacks.length + p2Attacks.length)
         {
-            if (p1turn)
+            if (p1turn && p1Attacks.length > 0)
             {
-                if (this.skillsPicked[0].length > 0)
-                {
-                    this.skillsOrdered.push(this.skillsPicked[0].shift());
-                }
+                this.skillsOrdered.push(p1Attacks.shift());
             }
-            else
+            else if (p2Attacks.length > 0)
             {
-                if (this.skillsPicked[1].length > 0)
-                {
-                    this.skillsOrdered.push(this.skillsPicked[1].shift());
-                }
+                this.skillsOrdered.push(p2Attacks.shift());
+
             }
             p1turn = !p1turn;
         }
