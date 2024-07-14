@@ -577,7 +577,7 @@ export class BattleSession
                         }
                         else skill.fatCost -= 4;
                     }
-                    else skill.addNumberedEffect('dmg', 2);
+                    else skill.addEffect('dmg', 2);
                 }
                 this.crs[actor].turnInfo.set('attacked', true);
 
@@ -618,7 +618,7 @@ export class BattleSession
             
                 
             case 'block':
-                if (this.crs[actor].hasTrait("Hardy")) skill.addEffect('block', 3);
+                if (this.crs[actor].hasTrait("Hardy")) skill.addEffect('block', 3, 'stance');
 
                 if (skill.effects.has('stance') && this.crs[actor].turnInfo.has('lastSkill'))
                 {
