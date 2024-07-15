@@ -11,9 +11,8 @@ import { createServer } from "https";
 import { Server, Socket} from "socket.io";
 import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
 import * as fs from 'fs';
+import * as http from "http";
 
-var privateKey = fs.readFileSync( 'privkey.pem' );
-var certificate = fs.readFileSync( 'fullchain.pem' );
 const fbase = initializeApp(firebaseConfig);
 const db = getFirestore(fbase);
 const schedule = require('node-schedule');
@@ -31,18 +30,38 @@ const actMap = new Map<string, any>;
         await rebuildOngoingActs();
     } catch (err) {console.error(err)}
 })();
+
 const app = express();
-const server = createServer(
+let server: any;
+try 
 {
-    key: privateKey,
-    cert: certificate
-}, app);const io = new Server(server,
-{
-    cors:   
+    var privateKey = fs.readFileSync( 'privkey.pem' );
+    var certificate = fs.readFileSync( 'fullchain.pem' );
+    server = createServer(
     {
-        origin: 'https://allatos-umber.vercel.app'
-    }
-});
+        key: privateKey,
+        cert: certificate
+    }, app);
+    var io = new Server(server,
+    {
+        cors:   
+        {
+            origin: 'https://allatos-umber.vercel.app'
+        }
+    });
+}
+catch (error)
+{
+    server = http.createServer(
+    {}, app);
+    var io = new Server(server,
+    {
+        cors:   
+        {
+            origin: '*'
+        }
+    });
+}
 
 io.on('connection', (socket: Socket) =>
 {

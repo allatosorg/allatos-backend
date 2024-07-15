@@ -5,9 +5,8 @@ import * as express from "express";
 import { createServer } from "https";
 import { Server, Socket} from "socket.io"
 import * as fs from 'fs';
+import * as http from "http";
 
-var privateKey = fs.readFileSync( 'privkey.pem' );
-var certificate = fs.readFileSync( 'fullchain.pem' );
 const crService = new CrService;
 const battlesInProgress = new Map<string, BattleSession>;
 const waiting: Array<any> = [];
@@ -15,17 +14,36 @@ let pairingPeople = false;
 let roomCounter = 0;
 
 const app = express();
-const server = createServer(
+let server: any;
+try 
 {
-    key: privateKey,
-    cert: certificate
-}, app);const io = new Server(server,
-{
-    cors:   
+    var privateKey = fs.readFileSync( 'privkey.pem' );
+    var certificate = fs.readFileSync( 'fullchain.pem' );
+    server = createServer(
     {
-        origin: 'https://allatos-umber.vercel.app'
-    }
-});
+        key: privateKey,
+        cert: certificate
+    }, app);
+    var io = new Server(server,
+    {
+        cors:   
+        {
+            origin: 'https://allatos-umber.vercel.app'
+        }
+    });
+}
+catch (error)
+{
+    server = http.createServer(
+    {}, app);
+    var io = new Server(server,
+    {
+        cors:   
+        {
+            origin: '*'
+        }
+    });
+}
 
 io.on('connection', (socket: any) =>
 {

@@ -3,24 +3,41 @@ import { UserService } from "./db_services/userService";
 import { generateCreature } from "./tools/creatureGenerator";
 import * as express from "express";
 import { createServer } from "https";
+import * as http from "http";
 import { Server, Socket} from "socket.io"
 import * as fs from 'fs';
 
-var privateKey = fs.readFileSync( 'privkey.pem' );
-var certificate = fs.readFileSync( 'fullchain.pem' );
 const app = express();
-const server = createServer(
+let server: any;
+try 
 {
-    key: privateKey,
-    cert: certificate
-}, app);
-const io = new Server(server,
-{
-    cors:   
+    var privateKey = fs.readFileSync( 'privkey.pem' );
+    var certificate = fs.readFileSync( 'fullchain.pem' );
+    server = createServer(
     {
-        origin: 'https://allatos-umber.vercel.app'
-    }
-});
+        key: privateKey,
+        cert: certificate
+    }, app);
+    var io = new Server(server,
+    {
+        cors:   
+        {
+            origin: 'https://allatos-umber.vercel.app'
+        }
+    });
+}
+catch (error)
+{
+    server = http.createServer(
+    {}, app);
+    var io = new Server(server,
+    {
+        cors:   
+        {
+            origin: '*'
+        }
+    });
+}
 
 let crService = new CrService;
 let userService = new UserService;
