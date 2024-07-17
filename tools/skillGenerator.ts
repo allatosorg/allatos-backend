@@ -1,10 +1,9 @@
 import { Skill } from "../models/skill";
 /*
 NOTES/IDEAS:
-- attacks stronger than blocks, but fatigue significantly sooner, comboable
-- blocks: less comboable, but can counter opponent's attacks, takes priority to attacks in combat
+- attacks stronger than blocks, but fatigue significantly sooner
+- blocks: can counter opponent's attacks, takes priority to attacks in combat
 - fatigue: skills build up fatigue, have to rest after a certain amount
-- diminishing returns on creature attributes (ie: 10 str -> 100% dmg , 15 str -> 120% dmg , 20 str -> 130% dmg)
 
 - craft multiple cards of same rarity -> upgrade another card or smth
 - "snap" keyword: free action (doesnt count as card played, but still has fat cost), small effect
@@ -13,14 +12,12 @@ NOTES/IDEAS:
 /*
 TYPES:
 - ATTACK
-    base: 6-7-8-10
     keywords:
         shredder: remove X block from opp
         heavy: builds more fatigue on opponent (but also more on you?)
         combo: extra effect if next skill is attack too
 
 - BLOCK
-    base: 4-5-6-8
     keywords:
         stance: extra block if previous was block too
         retaliate: deal damage if opponent attacked and all damage blocked
@@ -31,15 +28,6 @@ TYPES:
     keywords: stun || poison ? || 
 - BUFF
     keywords: heal
-*/
-
-/*
-Method of generation:
-    - get the rarity and type of skill to be generated
-    - add base skill properties
-    - load skill (functions) of that type into "skills" array
-    - choose a skill function randomly (and input rarity, so effects can be scaled accordingly), it adds/modifies the property variables
-    - construct and return skill
 */
 
 let selfTarget: boolean;

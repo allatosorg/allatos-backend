@@ -6,7 +6,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "servers": "concurrently \"ts-node server.ts\" \"ts-node act_server.ts\" \"ts-node functions.ts\""
+    "servers": "concurrently \"ts-node server_BATTLE.ts\" \"ts-node server_ACT.ts\" \"ts-node server_FUNCTIONS.ts\""
   },
   "keywords": [],
   "author": "",

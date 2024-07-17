@@ -293,8 +293,7 @@ export class BattleSession
             if (this.crs[actor].hasTrait("Iron Lungs")) this.removeFatigue(this.crs[actor], 2);
 
 
-            this.io.to(this.roomID).emit('action-happened', {type: ''});
-            this.sendSnapshot();
+            this.emitActionEvent({type: ''});
 
             if (!this.crs[actor].hasStatus("Steadfast")) this.removeBlock(this.crs[actor], this.crs[actor].block);
 
@@ -343,8 +342,7 @@ export class BattleSession
         //apply statuses from skill
         if (skill) this.applyStatuses(skill, actor, opp);
 
-        this.io.to(this.roomID).emit('action-happened', {type: 'gain-block', block: amount, actorID: actor.crID});
-        this.sendSnapshot();
+        this.emitActionEvent({type: 'gain-block', block: amount, actorID: actor.crID});
     }
 
     removeBlock(cr: ServerCreature, amount: number)
@@ -352,8 +350,7 @@ export class BattleSession
         if (amount > cr.block) amount = cr.block;
         cr.block -= amount;
 
-        this.io.to(this.roomID).emit('action-happened', {type: 'remove-block', block: -1 * amount, actorID: cr.crID});
-        this.sendSnapshot();
+        this.emitActionEvent({type: 'remove-block', block: -1 * amount, actorID: cr.crID});
     }
 
     hit(actor: ServerCreature, target: ServerCreature, dmg: number, skill?: Skill)
@@ -387,8 +384,7 @@ export class BattleSession
         if (skill) this.applyStatuses(skill, actor, target);
 
         this.combatLog += target.name + " got hit for " + dmg + " damage.\n"
-        this.io.to(this.roomID).emit('action-happened', {type: 'hit', dmg: dmg, targetID: target.crID});
-        this.sendSnapshot();
+        this.emitActionEvent({type: 'hit', dmg: dmg, targetID: target.crID});
     }
 
     //discard hand, draw X skills from deck
@@ -472,10 +468,12 @@ export class BattleSession
         this.sockets[1].emit('game-state-sent', this.crs[1], this.canPicks[1], decoy1, cr1SkillsLength, this.gameState);
     }
 
-    //send 1 for every action-happened
-    //TODO: combine action-happened and sendSnapshot
-    sendSnapshot()
+    //obj should always have a defined "type" property
+    emitActionEvent(obj: any)
     {
+        this.io.to(this.roomID).emit('action-happened', obj);
+
+        //send snapshot
         const cr1SkillsLength = this.crs[0].skills.length;
         const cr2SkillsLength = this.crs[1].skills.length;
         let decoy1 = { ...this.crs[0] };
@@ -497,7 +495,9 @@ export class BattleSession
         let decoy2 = { ...this.crs[1] };
         decoy1.skills = [];
         decoy2.skills = [];
-
+        decoy1.ownedBy = null;
+        decoy2.ownedBy = null;
+        
         if (socket === this.sockets[0])
         {
             this.sockets[0].emit('game-state-sent', this.crs[0], this.canPicks[0], decoy2, cr2SkillsLength, this.gameState);
@@ -519,8 +519,7 @@ export class BattleSession
     {
         //make a clone thats modifiable (and put ogSkill into grave)
         let skill = Object.assign(Object.create(Object.getPrototypeOf(ogSkill)), ogSkill);
-        this.io.to(this.roomID).emit('action-happened', skill);
-        this.sendSnapshot();
+        this.emitActionEvent(skill);
 
         //for cards with unique effects (before everything else)
         switch(skill.name)
@@ -658,8 +657,7 @@ export class BattleSession
         let whichPlayer = this.crs[0].crID === skill.usedByID ? 0 : 1;
         this.skillsUsed[whichPlayer].push(skill);
 
-        this.io.to(this.roomID).emit('action-happened', {type: ''});
-        this.sendSnapshot();
+        this.emitActionEvent({type: ''});
         this.sendLog();
     }
 
