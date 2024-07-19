@@ -191,7 +191,7 @@ export class ServerCreature
     {
         this.statuses.forEach((s, i) =>
         {
-            if (s.countsDown && s.name !== "First") s.counter--;
+            if (s.countsDown || s.name === "First") s.counter--;
             this.statuses[i] = s;
         });
         this.statuses = this.statuses.filter((s) => !s.countsDown || s.counter > 0);
