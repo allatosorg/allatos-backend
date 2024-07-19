@@ -527,7 +527,7 @@ function initCardBase(type: string)
     switch(type)
     {
         case 'attack':
-            effects.set('dmg', 3);
+            effects.set('dmg', 5);
             fatCost = 11;
             selfTarget = false;
 

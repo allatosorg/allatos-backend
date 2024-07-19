@@ -607,7 +607,7 @@ export class BattleSession
             
                 
             case 'block':
-                if (this.crs[actor].hasTrait("Hardy")) skill.addEffect('block', 3, 'stance');
+                if (this.crs[actor].hasTrait("Hardy")) skill.addEffect('block', 2, 'stance');
 
                 if (skill.effects.has('stance') && this.crs[actor].turnInfo.has('lastSkill'))
                 {
