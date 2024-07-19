@@ -438,6 +438,8 @@ export class BattleSession
 
     resetTurnInfo()
     {
+        this.skillsPicked[0].length = 0;
+        this.skillsPicked[1].length = 0;
         this.crs[0].turnInfo = new Map<string, any>([]);
         this.crs[1].turnInfo = new Map<string, any>([]);
     }
