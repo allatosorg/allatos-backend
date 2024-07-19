@@ -625,6 +625,8 @@ export class BattleSession
                 }
                 if (skill.effects.has('retaliate'))
                 {
+                    if (!this.crs[actor].turnInfo.has('retaliate')) this.crs[actor].turnInfo.set('retaliate', new Map<string, any>([]));
+
                     for (let [effect, value] of skill.effects.get('retaliate'))
                     {
                         if (this.crs[actor].turnInfo.get('retaliate').has(effect))
